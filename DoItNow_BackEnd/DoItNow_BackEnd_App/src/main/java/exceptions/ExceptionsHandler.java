@@ -14,7 +14,6 @@ import payloads.ErrorsPayload;
 @Slf4j
 public class ExceptionsHandler {
 
-	// BadRequestException
 	@ExceptionHandler(BadRequestException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorsPayload handleBadRequest(BadRequestException e) {

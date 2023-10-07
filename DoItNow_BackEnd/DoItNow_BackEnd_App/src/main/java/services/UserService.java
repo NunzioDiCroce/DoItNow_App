@@ -1,10 +1,11 @@
 package services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import entities.User;
-import exceptions.BadRequestException;
 import payloads.UserRequestPayload;
 import repositories.UserRepository;
 
@@ -19,11 +20,25 @@ public class UserService {
 	}
 
 	// create user
-	public User createUser(UserRequestPayload body) {
-		userRepository.findUserByEmail(body.getEmail()).ifPresent(user -> {
-			throw new BadRequestException("The email has already been used.");
-		});
-		return null;
+//	public User createUser(UserRequestPayload body) {
+//		userRepository.findUserByEmail(body.getEmail()).ifPresent(user -> {
+//			throw new BadRequestException("The email has already been used.");
+//		});
+//		User newUser = new User(body.getName(), body.getSurname(), body.getUserName(), body.getEmail(),
+//				body.getPassword());
+//		return userRepository.save(newUser);
+//
+//	}
+
+	public ResponseEntity<String> createUser(UserRequestPayload body) {
+//		if (userRepository.existsByEmail(body.getEmail())) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email has already been used.");
+//		}
+		User newUser = new User(body.getName(), body.getSurname(), body.getUserName(), body.getEmail(),
+				body.getPassword());
+		userRepository.save(newUser);
+		userRepository.existsById(null);
+		return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
 
 	}
 

@@ -1,9 +1,16 @@
 package services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import entities.User;
 import payloads.UserRequestPayload;
@@ -19,45 +26,58 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	// create user
-//	public User createUser(UserRequestPayload body) {
-//		userRepository.findUserByEmail(body.getEmail()).ifPresent(user -> {
-//			throw new BadRequestException("The email has already been used.");
-//		});
-//		User newUser = new User(body.getName(), body.getSurname(), body.getUserName(), body.getEmail(),
-//				body.getPassword());
-//		return userRepository.save(newUser);
-//
-//	}
-
+	// * * * * * * * * * * create user * * * * * * * * * *
+	@Transactional
 	public ResponseEntity<String> createUser(UserRequestPayload body) {
-//		if (userRepository.existsByEmail(body.getEmail())) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email has already been used.");
-//		}
+		if (userRepository.existsByEmail(body.getEmail())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email has already been used.");
+		}
+
 		User newUser = new User(body.getName(), body.getSurname(), body.getUserName(), body.getEmail(),
 				body.getPassword());
 		userRepository.save(newUser);
-		userRepository.existsById(null);
-		return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
 
+		return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
 	}
 
-	// find user by id
+	// * * * * * * * * * * find user by id * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findUserById(UUID id) {
+		Optional<User> optionalUser = userRepository.findById(id);
 
-	// find users by name (with pagination)
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return ResponseEntity.ok(user);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+		}
+	}
 
-	// find users by surname (with pagination)
+	// * * * * * * * * * * find users by name (with pagination) * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findUsersByName(String name, int page, int size, String sort) {
+		Page<User> users = userRepository.findAllByNameContainingIgnoreCase(name,
+				PageRequest.of(page, size, Sort.by(name)));
 
-	// find user by userName
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found for name: " + name);
+		}
 
-	// find user by email
+		return ResponseEntity.ok(users);
+	}
 
-	// find users by role (with pagination)
+	// * * * * * * * * * * find users by surname (with pagination) * * * * * * * * *
 
-	// find all users (with pagination)
+	// * * * * * * * * * * find user by userName * * * * * * * * * *
 
-	// update user
+	// * * * * * * * * * * find user by email * * * * * * * * * *
 
-	// delete user
+	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *
+
+	// * * * * * * * * * * find all users (with pagination) * * * * * * * * * *
+
+	// * * * * * * * * * * update user * * * * * * * * * *
+
+	// * * * * * * * * * * delete user * * * * * * * * * *
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import entities.User;
+import enums.Role;
 import payloads.UserRequestPayload;
 import repositories.UserRepository;
 
@@ -45,8 +46,7 @@ public class UserService {
 		Optional<User> optionalUser = userRepository.findById(id);
 
 		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(optionalUser.get());
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
 		}
@@ -84,19 +84,65 @@ public class UserService {
 		Optional<User> optionalUser = userRepository.findUserByEmail(email);
 
 		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(optionalUser.get());
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for email: " + email);
 		}
 	}
 
 	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findUsersByRole(Role role, int page, int size, String sort) {
+		Page<User> users = userRepository.findUserByRole(role, PageRequest.of(page, size, Sort.by(sort)));
+
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found by role: " + role);
+		} else {
+			return ResponseEntity.ok(users);
+		}
+	}
 
 	// * * * * * * * * * * find all users (with pagination) * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findAllUsers(int page, int size, String sort) {
+		Page<User> users = userRepository.findAll(PageRequest.of(page, size, Sort.by(sort)));
+
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found.");
+		} else {
+			return ResponseEntity.ok(users);
+		}
+	}
 
 	// * * * * * * * * * * update user * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<String> updateUser(UUID id, UserRequestPayload body) {
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			user.setName(body.getName());
+			user.setSurname(body.getSurname());
+			user.setEmail(body.getEmail());
+			user.setPassword(body.getPassword());
+			userRepository.save(user);
+			return ResponseEntity.ok("User updated successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+		}
+	}
 
 	// * * * * * * * * * * delete user * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<String> deleteUser(UUID id) {
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent()) {
+			userRepository.delete(optionalUser.get());
+			return ResponseEntity.ok("User deleted successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+		}
+	}
 
 }

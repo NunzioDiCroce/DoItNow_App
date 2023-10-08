@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import entities.User;
+import enums.Role;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -20,5 +21,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	Page<User> findAllBySurnameContainingIgnoreCase(String surname, Pageable pageable);
 
 	Optional<User> findUserByEmail(String email);
+
+	Page<User> findUserByRole(Role role, Pageable pageable);
 
 }

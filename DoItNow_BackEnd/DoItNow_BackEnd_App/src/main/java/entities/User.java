@@ -39,9 +39,6 @@ public class User implements UserDetails {
 	private String surname;
 
 	@Column(nullable = false, unique = true)
-	private String userName;
-
-	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)
@@ -54,10 +51,9 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Task> tasks;
 
-	public User(String name, String surname, String userName, String email, String password) {
+	public User(String name, String surname, String email, String password) {
 		this.name = name;
 		this.surname = surname;
-		this.userName = userName;
 		this.email = email;
 		this.password = password;
 		this.role = Role.USER;

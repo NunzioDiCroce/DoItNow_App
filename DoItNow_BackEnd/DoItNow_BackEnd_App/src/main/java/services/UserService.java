@@ -33,8 +33,7 @@ public class UserService {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email has already been used.");
 		}
 
-		User newUser = new User(body.getName(), body.getSurname(), body.getUserName(), body.getEmail(),
-				body.getPassword());
+		User newUser = new User(body.getName(), body.getSurname(), body.getEmail(), body.getPassword());
 		userRepository.save(newUser);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
@@ -61,16 +60,36 @@ public class UserService {
 
 		if (users.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found for name: " + name);
+		} else {
+			return ResponseEntity.ok(users);
 		}
-
-		return ResponseEntity.ok(users);
 	}
 
 	// * * * * * * * * * * find users by surname (with pagination) * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findUsersBySurname(String surname, int page, int size, String sort) {
+		Page<User> users = userRepository.findAllBySurnameContainingIgnoreCase(surname,
+				PageRequest.of(page, size, Sort.by(surname)));
 
-	// * * * * * * * * * * find user by userName * * * * * * * * * *
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found for surname: " + surname);
+		} else {
+			return ResponseEntity.ok(users);
+		}
+	}
 
 	// * * * * * * * * * * find user by email * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findUserByEmail(String email) {
+		Optional<User> optionalUser = userRepository.findUserByEmail(email);
+
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return ResponseEntity.ok(user);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for email: " + email);
+		}
+	}
 
 	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *
 

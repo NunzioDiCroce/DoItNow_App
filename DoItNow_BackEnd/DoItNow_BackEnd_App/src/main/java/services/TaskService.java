@@ -1,5 +1,8 @@
 package services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -129,5 +132,57 @@ public class TaskService {
 
 	// * * * * * * * * * * find tasks by user (with pagination) * * * * * * * * * *
 	// TODO
+
+	// * * * * * * * * * * find all tasks (with pagination) * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> findAllTasks(int page, int size, String sort) {
+		Page<Task> tasks = taskRepository.findAll(PageRequest.of(page, size, Sort.by(sort)));
+
+		if (tasks.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No tasks found.");
+		} else {
+			return ResponseEntity.ok(tasks);
+		}
+	}
+
+	// * * * * * * * * * * update task * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<String> updateTask(UUID id, TaskRequestPayload body) {
+		Optional<Task> optionalTask = taskRepository.findById(id);
+
+		if (optionalTask.isPresent()) {
+			Task task = optionalTask.get();
+			task.setTitle(body.getTitle());
+			task.setDescription(body.getDescription());
+			task.setCategory(body.getCategory());
+			task.setExpirationDate(body.getExpirationDate());
+			task.setCompleted(false);
+			task.setNotes(body.getNotes());
+
+			// user
+			// TODO
+
+			// taskId
+			// TODO
+
+			taskRepository.save(task);
+			return ResponseEntity.ok("Task updated successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
+		}
+	}
+
+	// * * * * * * * * * * delete task * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<String> deleteTask(UUID id) {
+		Optional<Task> optionalTask = taskRepository.findById(id);
+
+		if (optionalTask.isPresent()) {
+			taskRepository.delete(optionalTask.get());
+			return ResponseEntity.ok("Task deleted successfully.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
+		}
+	}
 
 }

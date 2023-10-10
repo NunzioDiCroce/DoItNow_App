@@ -12,8 +12,7 @@ import entities.Task;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID>, JpaSpecificationExecutor<Task> {
-	// extends JpaSpecificationExecutor<Task> to use
-	// 'taskRepository.findAll(specification, pageable)' in service
+	// JpaSpecificationExecutor to use specification in service
 
 	Page<Task> findAllByTaskIdContainingIgnoreCase(String taskId, Pageable pageable);
 

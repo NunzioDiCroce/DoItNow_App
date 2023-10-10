@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,17 +29,17 @@ public class TaskService {
 
 	// * * * * * * * * * * create task * * * * * * * * * *
 	@Transactional
-	public ResponseEntity<String> createTask(TaskRequestPayload body) {
+	public ResponseEntity<String> createTask(Task task) {
 
 		Task newTask = new Task();
 
 		// other properties
-		newTask.setTitle(body.getTitle());
-		newTask.setDescription(body.getDescription());
-		newTask.setCategory(body.getCategory());
-		newTask.setExpirationDate(body.getExpirationDate());
+		newTask.setTitle(task.getTitle());
+		newTask.setDescription(task.getDescription());
+		newTask.setCategory(task.getCategory());
+		newTask.setExpirationDate(task.getExpirationDate());
 		newTask.setCompleted(false);
-		newTask.setNotes(body.getNotes());
+		newTask.setNotes(task.getNotes());
 
 		// user
 		// TODO
@@ -132,6 +133,53 @@ public class TaskService {
 
 	// * * * * * * * * * * find tasks by user (with pagination) * * * * * * * * * *
 	// TODO
+
+	// * * * * * * * * * * search tasks (with pagination) * * * * * * * * * *
+	@Transactional
+	public ResponseEntity<?> searchTask(String title, String description, String category, String expirationDate,
+			String completed, int page, int size, String sort) {
+
+		// create a pageable object for pagination
+		PageRequest pageable = PageRequest.of(page, size, Sort.by(sort));
+
+		// initialize a search specification
+		Specification<Task> specification = Specification.where(null);
+
+		// search logic based on provided parameters
+		if (title != null) {
+			specification = specification
+					.or((root, query, builder) -> builder.like(root.get("title").as(String.class), "%" + title + "%"));
+		}
+
+		if (description != null) {
+			specification = specification.or((root, query, builder) -> builder
+					.like(root.get("description").as(String.class), "%" + description + "%"));
+		}
+
+		if (category != null) {
+			specification = specification.or((root, query, builder) -> builder
+					.like(root.get("category").as(String.class), "%" + category + "%"));
+		}
+
+		if (expirationDate != null) {
+			specification = specification.or((root, query, builder) -> builder
+					.like(root.get("expirationDate").as(String.class), "%" + expirationDate + "%"));
+		}
+
+		if (completed != null) {
+			specification = specification.or((root, query, builder) -> builder
+					.like(root.get("completed").as(String.class), "%" + completed + "%"));
+		}
+
+		// run the query with specification and pagination
+		Page<Task> tasks = taskRepository.findAll(specification, pageable);
+
+		if (tasks.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No tasks found.");
+		} else {
+			return ResponseEntity.ok(tasks);
+		}
+	}
 
 	// * * * * * * * * * * find all tasks (with pagination) * * * * * * * * * *
 	@Transactional

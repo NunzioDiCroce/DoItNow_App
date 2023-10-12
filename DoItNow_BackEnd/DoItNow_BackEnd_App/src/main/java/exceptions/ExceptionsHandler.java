@@ -27,4 +27,11 @@ public class ExceptionsHandler {
 	public ErrorsPayload handleUnauthorized(UnauthorizedException e) {
 		return new ErrorsPayload(e.getMessage(), new Date());
 	}
+
+	// * * * * * * * * * * NotFoundException 404 * * * * * * * * * *
+	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ErrorsPayload handleNotFound(NotFoundException e) {
+		return new ErrorsPayload(e.getMessage(), new Date());
+	}
 }

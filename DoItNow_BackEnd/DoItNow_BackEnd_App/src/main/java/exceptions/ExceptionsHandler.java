@@ -14,10 +14,17 @@ import payloads.ErrorsPayload;
 @Slf4j
 public class ExceptionsHandler {
 
+	// * * * * * * * * * * BadRequestException 400 * * * * * * * * * *
 	@ExceptionHandler(BadRequestException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorsPayload handleBadRequest(BadRequestException e) {
 		return new ErrorsPayload(e.getMessage(), new Date());
 	}
 
+	// * * * * * * * * * * UnauthorizedException 401 * * * * * * * * * *
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ErrorsPayload handleUnauthorized(UnauthorizedException e) {
+		return new ErrorsPayload(e.getMessage(), new Date());
+	}
 }

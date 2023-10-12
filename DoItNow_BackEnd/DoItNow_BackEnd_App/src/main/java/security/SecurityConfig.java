@@ -26,15 +26,17 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+		// Cross-Site Request Forgery: prevent unwanted actions without user consent
 		http.csrf(c -> c.disable());
 
+		// to have stateless sessions in line with REST API approach
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
-
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/tasks/**").authenticated());
 
+		// to configure filters order
 		http.addFilterBefore(corsFilter, JWTAuthFilter.class);
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -43,6 +45,7 @@ public class SecurityConfig {
 
 	@Bean
 	PasswordEncoder encoder() {
+		// to set bcrypt password hashing algorithm iterations x11 times
 		return new BCryptPasswordEncoder(11);
 	}
 

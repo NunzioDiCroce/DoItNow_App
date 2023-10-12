@@ -57,13 +57,15 @@ public class UserService {
 		userRepository.delete(this.findUserById(id));
 	}
 
+	// * * * * * * * * * * find user by email * * * * * * * * * *
+	public User findUserByEmail(String email) throws NotFoundException {
+		return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
+	}
+
 	// * * * * * * * * * * find users by name (with pagination) * * * * * * * * * *
 	// TODO
 
 	// * * * * * * * * * * find users by surname (with pagination) * * * * * * * * *
-	// TODO
-
-	// * * * * * * * * * * find user by email * * * * * * * * * *
 	// TODO
 
 	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *

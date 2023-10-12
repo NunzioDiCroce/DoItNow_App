@@ -1,12 +1,16 @@
 package security;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import entities.User;
 import exceptions.UnauthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -40,8 +44,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 		jwtTools.verifyToken(token);
 
 		String id = jwtTools.extractSubject(token);
-//		User currentUser = userService.findUserById(UUID.fromString(id));
+		User currentUser = userService.findUserById(UUID.fromString(id));
 
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(currentUser, null,
+				currentUser.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+		filterChain.doFilter(request, response);
 	}
 
 	// * * * * * * * * * * shouldNotFilter * * * * * * * * * *

@@ -64,6 +64,7 @@ public class UserController {
 
 	// * * * * find users by name, surname, email, role (with pagination) * * * * *
 	@GetMapping("/search")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Page<User> searchUsers(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String surname, @RequestParam(required = false) String email,
 			@RequestParam(required = false) Role role, @RequestParam(defaultValue = "0") int page,

@@ -1,5 +1,6 @@
 package controllers;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import entities.Task;
+import enums.Category;
 import payloads.TaskRequestPayload;
 import services.TaskService;
 
@@ -64,13 +66,16 @@ public class TaskController {
 		taskService.deleteTask(taskId);
 	}
 
-	// * * * * * * * * * * find tasks by taskId (with pagination) * * * * * * * * *
-	// * * * * * * * * * * find tasks by title (with pagination) * * * * * * * * * *
-	// * * * * * * * * * * find tasks by description (with pagination) * * * * * * *
-	// * * * * * * * * * * find tasks by category (with pagination) * * * * * * * *
-	// * * * * * * * * * * find tasks by expiration date (with pagination) * * * * *
-	// * * * * * * * * * * find tasks by completed (with pagination) * * * * * * * *
-	// * * * * * * * * * * find tasks by user (with pagination) * * * * * * * * * *
-	// * * * * * * * * * * search tasks (with pagination) * * * * * * * * * *
+	// * * * find tasks by taskId, title, description, category, expiration date,
+	// completed, user (with pagination) * * *
+	@GetMapping("/search")
+	public Page<Task> searchTasks(@RequestParam(required = false) String taskId,
+			@RequestParam(required = false) String title, @RequestParam(required = false) String description,
+			@RequestParam(required = false) Category category, @RequestParam(required = false) LocalDate expirationDate,
+			@RequestParam(required = false) Boolean completed, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sort) {
+		return taskService.searchTasks(taskId, title, description, category, expirationDate, completed, page, size,
+				sort);
+	}
 
 }

@@ -1,14 +1,17 @@
 package services;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import entities.Task;
+import enums.Category;
 import exceptions.NotFoundException;
 import payloads.TaskRequestPayload;
 import repositories.TaskRepository;
@@ -76,13 +79,27 @@ public class TaskService {
 		taskRepository.delete(this.findtaskById(id));
 	}
 
-	// * * * * * * * * * * find tasks by taskId (with pagination) * * * * * * * * *
-	// * * * * * * * * * * find tasks by title (with pagination) * * * * * * * * * *
-	// * * * * * * * * * * find tasks by description (with pagination) * * * * * * *
-	// * * * * * * * * * * find tasks by category (with pagination) * * * * * * * *
-	// * * * * * * * * * * find tasks by expiration date (with pagination) * * * * *
-	// * * * * * * * * * * find tasks by completed (with pagination) * * * * * * * *
-	// * * * * * * * * * * find tasks by user (with pagination) * * * * * * * * * *
-	// * * * * * * * * * * search tasks (with pagination) * * * * * * * * * *
+	// * * * find tasks by taskId, title, description, category, expiration date,
+	// completed, user (with pagination) * * *
+	public Page<Task> searchTasks(String taskId, String title, String description, Category category,
+			LocalDate expirationDate, Boolean completed, int page, int size, String sort) {
+
+		// probe (sonda) object definition
+		Task probe = new Task();
+		probe.setTaskId(taskId);
+		probe.setTitle(title);
+		probe.setDescription(description);
+		probe.setCategory(category);
+		probe.setExpirationDate(expirationDate);
+		probe.setCompleted(completed);
+
+		// example object definition
+		Example<Task> example = Example.of(probe);
+
+		// pageRequest object definition
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sort));
+
+		return taskRepository.findAll(example, pageRequest);
+	}
 
 }

@@ -3,12 +3,14 @@ package services;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import entities.User;
+import enums.Role;
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import payloads.UserRequestPayload;
@@ -58,16 +60,52 @@ public class UserService {
 	}
 
 	// * * * * * * * * * * find user by email * * * * * * * * * *
+	// method used in AuthController
 	public User findUserByEmail(String email) throws NotFoundException {
 		return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
 	}
 
 	// * * * * * * * * * * find users by name (with pagination) * * * * * * * * * *
-	// TODO
+	// method not used in UserController
+	public Page<User> findUsersByName(String name, int page, int size, String sort) {
+		return userRepository.findByName(name, PageRequest.of(page, size, Sort.by(sort)));
+	}
 
 	// * * * * * * * * * * find users by surname (with pagination) * * * * * * * * *
-	// TODO
+	// method not used in UserController
+	public Page<User> findUsersBySurname(String surname, int page, int size, String sort) {
+		return userRepository.findBySurname(surname, PageRequest.of(page, size, Sort.by(sort)));
+	}
+
+	// * * * * * * * * * * find users by email (with pagination) * * * * * * * * *
+	// method not used in UserController
+	public Page<User> findUsersByEmail(String email, int page, int size, String sort) {
+		return userRepository.findBySurname(email, PageRequest.of(page, size, Sort.by(sort)));
+	}
 
 	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *
-	// TODO
+	// method not used in UserController
+	public Page<User> findUsersByRole(Role role, int page, int size, String sort) {
+		return userRepository.findByRole(role, PageRequest.of(page, size, Sort.by(sort)));
+	}
+
+	// * * * * find users by name, surname, email, role (with pagination) * * * * *
+	public Page<User> searchUsers(String name, String surname, String email, Role role, int page, int size,
+			String sort) {
+
+		// probe (sonda) object definition
+		User probe = new User();
+		probe.setName(name);
+		probe.setSurname(surname);
+		probe.setEmail(email);
+		probe.setRole(role);
+
+		// example object definition
+		Example<User> example = Example.of(probe);
+
+		// pageRequest object definition
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sort));
+
+		return userRepository.findAll(example, pageRequest);
+	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import entities.User;
+import enums.Role;
 import payloads.UserRequestPayload;
 import services.UserService;
 
@@ -61,16 +62,13 @@ public class UserController {
 		userService.deleteUser(userId);
 	}
 
-	// * * * * * * * * * * find user by email * * * * * * * * * *
-	// TODO
-
-	// * * * * * * * * * * find users by name (with pagination) * * * * * * * * * *
-	// TODO
-
-	// * * * * * * * * * * find users by surname (with pagination) * * * * * * * * *
-	// TODO
-
-	// * * * * * * * * * * find users by role (with pagination) * * * * * * * * * *
-	// TODO
+	// * * * * find users by name, surname, email, role (with pagination) * * * * *
+	@GetMapping("/search")
+	public Page<User> searchUsers(@RequestParam(required = false) String name,
+			@RequestParam(required = false) String surname, @RequestParam(required = false) String email,
+			@RequestParam(required = false) Role role, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sort) {
+		return userService.searchUsers(name, surname, email, role, page, size, sort);
+	}
 
 }

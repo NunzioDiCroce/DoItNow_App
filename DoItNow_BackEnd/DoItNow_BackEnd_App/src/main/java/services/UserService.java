@@ -47,11 +47,11 @@ public class UserService {
 
 	// * * * * * * * * * * update user * * * * * * * * * *
 	public User updateUser(UUID id, UserRequestPayload body) throws NotFoundException {
-		User userUpdated = this.findUserById(id);
-		userUpdated.setName(body.getName());
-		userUpdated.setSurname(body.getSurname());
-		userUpdated.setEmail(body.getEmail());
-		return userRepository.save(userUpdated);
+		User updatedUser = this.findUserById(id);
+		updatedUser.setName(body.getName());
+		updatedUser.setSurname(body.getSurname());
+		updatedUser.setEmail(body.getEmail());
+		return userRepository.save(updatedUser);
 	}
 
 	// * * * * * * * * * * delete user * * * * * * * * * *

@@ -1,7 +1,7 @@
 package services;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +40,12 @@ public class TaskService {
 		User taskUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException(userEmail));
 
 		// get user tasks to define taskId
-		Optional<Task> userTasks = taskRepository.findByUser(taskUser);
+		List<Task> userTasks = taskRepository.findAllByUser(taskUser);
+		int maxTaskId = userTasks.stream().mapToInt(taskId -> Integer.parseInt(taskId.getTaskId())).max().orElse(0);
+		int newTaskId = maxTaskId + 1;
+		String formattedTaskId = String.format("%04d", newTaskId);
 
-		newTask.setTaskId(null);
+		newTask.setTaskId(formattedTaskId);
 		newTask.setTitle(task.getTitle());
 		newTask.setDescription(task.getDescription());
 		newTask.setCategory(task.getCategory());
@@ -65,22 +68,29 @@ public class TaskService {
 	}
 
 	// * * * * * * * * * * update task * * * * * * * * * *
-	public Task updateTask(UUID id, TaskRequestPayload payload) throws NotFoundException {
-		Task taskUpdated = new Task();
-		taskUpdated.setTitle(payload.getTitle());
-		taskUpdated.setDescription(payload.getDescription());
-		taskUpdated.setCategory(payload.getCategory());
-		taskUpdated.setExpirationDate(payload.getExpirationDate());
-		taskUpdated.setCompleted(payload.getCompleted());
-		taskUpdated.setNotes(payload.getNotes());
+	public Task updateTask(UUID id, TaskRequestPayload payload, String userEmail) throws NotFoundException {
 
-		// user
-		// TODO
+		Task updatedTask = new Task();
 
-		// taskId
-		// TODO
+		// get user by email to assign task
+		User taskUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException(userEmail));
 
-		return taskRepository.save(taskUpdated);
+		// get user tasks to define taskId
+		List<Task> userTasks = taskRepository.findAllByUser(taskUser);
+		int maxTaskId = userTasks.stream().mapToInt(taskId -> Integer.parseInt(taskId.getTaskId())).max().orElse(0);
+		int newTaskId = maxTaskId + 1;
+		String formattedTaskId = String.format("%04d", newTaskId);
+
+		updatedTask.setTaskId(formattedTaskId);
+		updatedTask.setTitle(payload.getTitle());
+		updatedTask.setDescription(payload.getDescription());
+		updatedTask.setCategory(payload.getCategory());
+		updatedTask.setExpirationDate(payload.getExpirationDate());
+		updatedTask.setCompleted(payload.getCompleted());
+		updatedTask.setNotes(payload.getNotes());
+		updatedTask.setUser(taskUser);
+
+		return taskRepository.save(updatedTask);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *

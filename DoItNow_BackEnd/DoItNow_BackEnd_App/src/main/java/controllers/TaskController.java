@@ -36,7 +36,7 @@ public class TaskController {
 	// * * * * * * * * * * create task * * * * * * * * * *
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Task createTask(@RequestBody Task task, String userEmail) {
+	public Task createTask(@RequestBody Task task, @RequestParam String userEmail) {
 		return taskService.createTask(task, userEmail);
 	}
 
@@ -55,8 +55,9 @@ public class TaskController {
 
 	// * * * * * * * * * * update task * * * * * * * * * *
 	@PutMapping("/{taskId}")
-	public Task updateTask(@PathVariable UUID taskId, @RequestBody TaskRequestPayload payload) {
-		return taskService.updateTask(taskId, payload);
+	public Task updateTask(@PathVariable UUID taskId, @RequestBody TaskRequestPayload payload,
+			@RequestParam String userEmail) {
+		return taskService.updateTask(taskId, payload, userEmail);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *

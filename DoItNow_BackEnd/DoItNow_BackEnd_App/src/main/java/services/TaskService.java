@@ -1,6 +1,7 @@
 package services;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,38 +12,46 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import entities.Task;
+import entities.User;
 import enums.Category;
 import exceptions.NotFoundException;
 import payloads.TaskRequestPayload;
 import repositories.TaskRepository;
+import repositories.UserRepository;
 
 @Service
 public class TaskService {
 
 	private final TaskRepository taskRepository;
+	private final UserRepository userRepository;
 
 	@Autowired
-	public TaskService(TaskRepository taskRepository) {
+	public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
 		this.taskRepository = taskRepository;
+		this.userRepository = userRepository;
 	}
 
 	// * * * * * * * * * * create task * * * * * * * * * *
-	public Task createTask(Task task) {
+	public Task createTask(Task task, String userEmail) {
+
 		Task newTask = new Task();
+
+		// get user by email to assign task
+		User taskUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException(userEmail));
+
+		// get user tasks to define taskId
+		Optional<Task> userTasks = taskRepository.findByUser(taskUser);
+
+		newTask.setTaskId(null);
 		newTask.setTitle(task.getTitle());
 		newTask.setDescription(task.getDescription());
 		newTask.setCategory(task.getCategory());
 		newTask.setExpirationDate(task.getExpirationDate());
 		newTask.setCompleted(false);
 		newTask.setNotes(task.getNotes());
+		newTask.setUser(taskUser);
 
-		// user
-		// TODO
-
-		// taskId
-		// TODO
-
-		return taskRepository.save(task);
+		return taskRepository.save(newTask);
 	}
 
 	// * * * * * * * * * * find task by id * * * * * * * * *

@@ -32,9 +32,9 @@ public class SecurityConfig {
 		// to have stateless sessions in line with REST API approach
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/tasks/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
 
 		// to configure filters order
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

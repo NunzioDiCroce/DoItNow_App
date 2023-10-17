@@ -57,7 +57,7 @@ public class TaskService {
 	}
 
 	// * * * * * * * * * * find task by id * * * * * * * * *
-	public Task findtaskById(UUID id) throws NotFoundException {
+	public Task findTaskById(UUID id) throws NotFoundException {
 		return taskRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
 	}
 
@@ -94,7 +94,7 @@ public class TaskService {
 
 	// * * * * * * * * * * delete task * * * * * * * * * *
 	public void deleteTask(UUID id) throws NotFoundException {
-		taskRepository.delete(this.findtaskById(id));
+		taskRepository.delete(this.findTaskById(id));
 	}
 
 	// * * * find tasks by taskId, title, description, category, expiration date,

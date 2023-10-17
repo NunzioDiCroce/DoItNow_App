@@ -36,40 +36,46 @@ public class TaskController {
 	// * * * * * * * * * * create task * * * * * * * * * *
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+//	@PreAuthorize("isAuthenticated()")
 	public Task createTask(@RequestBody Task task, @RequestParam String userEmail) {
 		return taskService.createTask(task, userEmail);
 	}
 
 	// * * * * * * * * * * find task by id * * * * * * * * *
-	@GetMapping("/{taskId}")
+	@GetMapping("/{id}")
+//	@PreAuthorize("isAuthenticated()")
 	public Task findtaskById(@PathVariable UUID id) {
-		return taskService.findtaskById(id);
+		return taskService.findTaskById(id);
 	}
 
 	// * * * * * * * * * * find all tasks (with pagination) * * * * * * * * * *
 	@GetMapping()
+//	@PreAuthorize("isAuthenticated()")
 	public Page<Task> findAllTasks(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "taskId") String sort) {
 		return taskService.findAllTasks(page, size, sort);
 	}
 
 	// * * * * * * * * * * update task * * * * * * * * * *
-	@PutMapping("/{taskId}")
-	public Task updateTask(@PathVariable UUID taskId, @RequestBody TaskRequestPayload payload,
+	@PutMapping("/{id}")
+//	@PreAuthorize("isAuthenticated()")
+	public Task updateTask(@PathVariable UUID Id, @RequestBody TaskRequestPayload payload,
 			@RequestParam String userEmail) {
-		return taskService.updateTask(taskId, payload, userEmail);
+		return taskService.updateTask(Id, payload, userEmail);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *
-	@DeleteMapping("/{taskId}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteTask(@PathVariable UUID taskId) {
-		taskService.deleteTask(taskId);
+//	@PreAuthorize("isAuthenticated()")
+	public void deleteTask(@PathVariable UUID Id) {
+		taskService.deleteTask(Id);
 	}
 
 	// * * * find tasks by taskId, title, description, category, expiration date,
 	// completed, user (with pagination) * * *
 	@GetMapping("/search")
+//	@PreAuthorize("isAuthenticated()")
 	public Page<Task> searchTasks(@RequestParam(required = false) String taskId,
 			@RequestParam(required = false) String title, @RequestParam(required = false) String description,
 			@RequestParam(required = false) Category category, @RequestParam(required = false) LocalDate expirationDate,

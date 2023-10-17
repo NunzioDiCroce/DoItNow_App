@@ -41,8 +41,7 @@ public class TaskService {
 
 		// get user tasks to define taskId
 		List<Task> userTasks = taskRepository.findAllByUser(taskUser);
-		int maxTaskId = userTasks.stream().mapToInt(taskId -> Integer.parseInt(taskId.getTaskId())).max().orElse(0);
-		int newTaskId = maxTaskId + 1;
+		int newTaskId = userTasks.size() + 1;
 		String formattedTaskId = String.format("%04d", newTaskId);
 
 		newTask.setTaskId(formattedTaskId);

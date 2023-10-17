@@ -24,7 +24,7 @@ public class Task {
 	@GeneratedValue
 	private UUID id;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String taskId;
 
 	@Column(nullable = false)

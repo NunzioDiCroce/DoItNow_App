@@ -50,4 +50,5 @@ public class AuthController {
 			throw new UnauthorizedException("Invalid credentials.");
 		}
 	}
+
 }

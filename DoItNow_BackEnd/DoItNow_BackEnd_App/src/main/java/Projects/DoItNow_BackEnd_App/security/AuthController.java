@@ -22,13 +22,13 @@ import Projects.DoItNow_BackEnd_App.services.UserService;
 public class AuthController {
 
 	@Autowired
-	PasswordEncoder bcrypt;
-
-	@Autowired
 	UserService userService;
 
 	@Autowired
 	JWTTools jwtTools;
+
+	@Autowired
+	PasswordEncoder bcrypt;
 
 	// * * * * * * * * * * user sign in * * * * * * * * * *
 	@PostMapping("/signIn")
@@ -40,7 +40,7 @@ public class AuthController {
 	}
 
 	// * * * * * * * * * * user login * * * * * * * * * *
-	@PostMapping("login")
+	@PostMapping("/login")
 	public LoginSuccessfullPayload userLogin(@RequestBody UserLoginPayload payload) {
 		User user = userService.findUserByEmail(payload.getEmail());
 		if (bcrypt.matches(payload.getPassword(), user.getPassword())) {

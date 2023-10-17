@@ -32,12 +32,12 @@ public class TaskService {
 	}
 
 	// * * * * * * * * * * create task * * * * * * * * * *
-	public Task createTask(Task task, String userEmail) {
+	public Task createTask(Task task, UUID userId) {
 
 		Task newTask = new Task();
 
 		// get user by email to assign task
-		User taskUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException(userEmail));
+		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
 
 		// get user tasks to define taskId
 		List<Task> userTasks = taskRepository.findAllByUser(taskUser);

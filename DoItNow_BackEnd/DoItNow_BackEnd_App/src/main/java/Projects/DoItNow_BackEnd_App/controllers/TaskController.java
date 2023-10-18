@@ -60,17 +60,17 @@ public class TaskController {
 	// * * * * * * * * * * update task * * * * * * * * * *
 	@PutMapping("/{id}")
 //	@PreAuthorize("isAuthenticated()")
-	public Task updateTask(@PathVariable UUID Id, @RequestBody TaskRequestPayload payload,
+	public Task updateTask(@PathVariable UUID id, @RequestBody TaskRequestPayload payload,
 			@RequestParam String userEmail) {
-		return taskService.updateTask(Id, payload, userEmail);
+		return taskService.updateTask(id, payload, userEmail);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 //	@PreAuthorize("isAuthenticated()")
-	public void deleteTask(@PathVariable UUID Id) {
-		taskService.deleteTask(Id);
+	public void deleteTask(@PathVariable UUID id) {
+		taskService.deleteTask(id);
 	}
 
 	// * * * find tasks by taskId, title, description, category, expiration date,

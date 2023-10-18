@@ -37,7 +37,7 @@ public class TaskController {
 	// * * * * * * * * * * create task * * * * * * * * * *
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@PreAuthorize("isAuthenticated('USER')")
+	@PreAuthorize("hasAuthority('ROLE_USER')")
 	public Task createTask(@RequestBody Task task, @RequestParam UUID userId) {
 		return taskService.createTask(task, userId);
 	}

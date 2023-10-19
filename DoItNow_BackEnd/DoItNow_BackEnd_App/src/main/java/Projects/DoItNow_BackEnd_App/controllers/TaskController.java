@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +36,7 @@ public class TaskController {
 	// * * * * * * * * * * create task * * * * * * * * * *
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@PreAuthorize("hasAuthority('USER')")
+//	@PreAuthorize("hasAuthority('USER')")
 	public Task createTask(@RequestBody Task task, @RequestParam UUID userId) {
 		return taskService.createTask(task, userId);
 	}

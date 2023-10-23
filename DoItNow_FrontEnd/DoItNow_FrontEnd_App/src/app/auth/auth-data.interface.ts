@@ -1,4 +1,5 @@
 export interface AuthData {
+  // - - - - - - - - - - AuthData definition - - - - - - - - - -
   accessToken: string;
   user: {
     id: number,

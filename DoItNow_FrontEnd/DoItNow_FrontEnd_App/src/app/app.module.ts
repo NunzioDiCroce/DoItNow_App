@@ -13,15 +13,16 @@ import { HomeComponent } from './components/home/home.component';
 import { UsersComponent } from './components/users/users.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuard } from './auth/auth.guard';
 
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
   { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'tasks', component: TasksComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'users', component: UsersComponent },
+  { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: ''}
 ]
 

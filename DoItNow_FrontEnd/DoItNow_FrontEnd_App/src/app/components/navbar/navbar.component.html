@@ -17,29 +17,29 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="">Register</a>
+          <a class="nav-link active text-white" [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="!user">Register</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/login']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="">Login</a>
+          <a class="nav-link active text-white" [routerLink]="['/login']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="!user">Login</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/tasks']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="">Tasks</a>
+          <a class="nav-link active text-white" [routerLink]="['/tasks']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="user">Tasks</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="">Users</a>
+          <a class="nav-link active text-white" [routerLink]="['/users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="user">Users</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/profile']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="">Profile</a>
+          <a class="nav-link active text-white" [routerLink]="['/profile']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="user">Profile</a>
         </li>
 
       </ul>
 
-      <div class="text-white me-3">Hello Mario Rossi</div>
-      <div class="text-white me-2"><button type="button" class="btn btn-outline-light">Logout</button></div>
+      <div class="text-white me-3" *ngIf="user">Hello <strong>{{user.user.name}} {{user.user.surname}}</strong></div>
+      <div class="text-white me-2" *ngIf="user"><button type="button" class="btn btn-outline-light" (click)="logout()">Logout</button></div>
 
     </div>
 

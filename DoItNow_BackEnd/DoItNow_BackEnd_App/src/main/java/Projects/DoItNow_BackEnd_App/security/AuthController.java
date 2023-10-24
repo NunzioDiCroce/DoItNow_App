@@ -30,8 +30,8 @@ public class AuthController {
 	@Autowired
 	PasswordEncoder bcrypt;
 
-	// * * * * * * * * * * user sign in * * * * * * * * * *
-	@PostMapping("/signIn")
+	// * * * * * * * * * * user register * * * * * * * * * *
+	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public User userSignIn(@RequestBody @Validated UserRequestPayload payload) {
 		payload.setPassword(bcrypt.encode(payload.getPassword()));

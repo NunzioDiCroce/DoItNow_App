@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },

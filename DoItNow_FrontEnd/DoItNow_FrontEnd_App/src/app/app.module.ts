@@ -15,6 +15,7 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './auth/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
@@ -44,7 +45,8 @@ const routes: Route[] = [
 
     // - - - - - - - - - - imports - - - - - - - - - -
     RouterModule.forRoot(routes),
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
 
   ],
   providers: [],

@@ -1,17 +1,19 @@
 package Projects.DoItNow_BackEnd_App.exceptions;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import Projects.DoItNow_BackEnd_App.payloads.ErrorsPayload;
-import lombok.extern.slf4j.Slf4j;
+import Projects.DoItNow_BackEnd_App.payloads.ErrorsPayloadWithList;
 
 @RestControllerAdvice
-@Slf4j
 public class ExceptionsHandler {
 
 	// * * * * * * * * * * BadRequestException 400 * * * * * * * * * *
@@ -28,10 +30,34 @@ public class ExceptionsHandler {
 		return new ErrorsPayload(e.getMessage(), new Date());
 	}
 
+	// * * * * * * * * * * AccessDeniedException 403 * * * * * * * * * *
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorsPayload handleForbidden(AccessDeniedException e) {
+		return new ErrorsPayload(e.getMessage(), new Date());
+	}
+
 	// * * * * * * * * * * NotFoundException 404 * * * * * * * * * *
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorsPayload handleNotFound(NotFoundException e) {
 		return new ErrorsPayload(e.getMessage(), new Date());
 	}
+
+	// * * * * * * * * * * InternalServerError 500 * * * * * * * * * *
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorsPayload handleGeneric(Exception e) {
+		return new ErrorsPayload("Generic error, we will resolve it as soon as possible.", new Date());
+	}
+
+	// * * * * * * * * * * ValidationErrors * * * * * * * * * *
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorsPayloadWithList handleValidationErrors(MethodArgumentNotValidException e) {
+		List<String> errors = e.getBindingResult().getFieldErrors().stream().map(error -> error.getDefaultMessage())
+				.toList();
+		return new ErrorsPayloadWithList("There are errors in the payload.", new Date(), errors);
+	}
+
 }

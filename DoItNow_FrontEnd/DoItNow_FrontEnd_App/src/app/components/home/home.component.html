@@ -1,4 +1,17 @@
 <div class="container">
-  <h4 class="mb-3">Home title</h4>
-  <p>This is the Home text...</p>
+  <div class="row d-flex flex-column">
+    <div class="col-3 d-flex justify-content-center mb-3">
+      <img src="../../../assets/images/doItNowIcon2.png" alt="Logo" width=100% height="" class="">
+    </div>
+    <div class="col-12 d-flex justify-content-center mb-3">
+      <h1 class="text-center">A perfect online app for creating to-do lists</h1>
+    </div>
+    <div class="col-12 d-flex justify-content-center mb-3">
+      <h4 class="text-center">'Do It Now' helps you plan easily using to-do lists.</h4>
+    </div>
+    <div class="col-12 d-flex justify-content-center">
+      <button type="button" class="btn btn-dark me-3" (click)="goToRegister()" *ngIf="!user">Register</button>
+      <button type="button" class="btn btn-dark" (click)="goToLogin()" *ngIf="!user">Login</button>
+    </div>
+  </div>
 </div>

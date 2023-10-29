@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   // - - - - - - - - - - LoginComponent definition - - - - - - - - - -
   isLoading = false;
+  loginError: string | null = null;
 
   constructor(private authSrv: AuthService, private router: Router) { }
 
@@ -22,19 +23,22 @@ export class LoginComponent implements OnInit {
 
   login(form: NgForm) {
     this.isLoading = true;
+    this.loginError = null;
     try {
       this.authSrv.login(form.value).subscribe(() => {
         this.isLoading = false;
-        alert('Registration success!');
+        alert('Login success!');
         this.router.navigate(['/']);
       },
-      (error) => {
+      (error: any) => {
         this.isLoading = false;
+        this.loginError = 'Wrong login!'
         alert('Wrong login!');
         console.log(error);
       });
-    } catch(error) {
-
+    } catch(error: any) {
+      this.isLoading = false;
+      console.log(error);
     }
   }
 

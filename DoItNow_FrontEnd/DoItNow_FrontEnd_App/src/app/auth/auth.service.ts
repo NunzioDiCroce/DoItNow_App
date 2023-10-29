@@ -23,11 +23,6 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-  // signup
-  register(data: {name: string, surname: string, email: string, password: string}) {
-    return this.httpClient.post(`${this.baseUrl}auth/register`, data);
-  }
-
   // login
   login(data: {email: string, password: string}) {
     return this.httpClient.post<AuthData>(`${this.baseUrl}auth/login`, data).pipe(tap((data) => {
@@ -52,6 +47,11 @@ export class AuthService {
     }
     this.authSubj.next(userData);
     this.autoLogout(userData);
+  }
+
+  // signup
+  register(data: {name: string, surname: string, email: string, password: string}) {
+    return this.httpClient.post(`${this.baseUrl}auth/register`, data);
   }
 
   // logout

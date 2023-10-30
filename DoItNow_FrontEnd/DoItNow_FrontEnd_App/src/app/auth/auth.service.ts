@@ -31,7 +31,7 @@ export class AuthService {
       this.utente = data;
       console.log(this.utente);
       localStorage.setItem('user', JSON.stringify(data));
-      this.autoLogout(data);
+      //this.autoLogout(data);
     }))
   }
 
@@ -46,7 +46,7 @@ export class AuthService {
       return
     }
     this.authSubj.next(userData);
-    this.autoLogout(userData);
+    //this.autoLogout(userData);
   }
 
   // signup
@@ -65,11 +65,11 @@ export class AuthService {
   }
 
   // autoLogout
-  autoLogout(data: AuthData) {
+  /*autoLogout(data: AuthData) {
     const expirationDate = this.jwtHelper.getTokenExpirationDate(data.accessToken) as Date;
     const expirationMilliseconds = expirationDate.getTime() - new Date().getTime();
     this.timeoutLogout = setTimeout(() => {this.logout()}, expirationMilliseconds);
-  }
+  }*/
 
   // errors handling
   private errors(err: any) {

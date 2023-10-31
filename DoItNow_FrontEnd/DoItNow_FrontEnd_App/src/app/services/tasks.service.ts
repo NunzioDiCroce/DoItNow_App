@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 // - - - - - - - - - - import - - - - - - - - - -
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { TaskCreate } from '../models/task-create.interface';
 
@@ -16,7 +16,7 @@ export class TasksService {
   constructor(private httpClient: HttpClient, private router: Router) { }
 
   // getTasks
-  getTasks(page: number, size: number, sortBy: string) {
+  getTasks(page: number, size: number, sortBy: string): Observable<any> {
     const userString = localStorage.getItem('user');
     const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sortBy);
     if(!userString) {
@@ -33,7 +33,7 @@ export class TasksService {
   }
 
   // createTask
-  createTask(task: TaskCreate) {
+  createTask(task: TaskCreate): Observable<any> {
     const userString = localStorage.getItem('user');
     if(!userString) {
       this.router.navigate(['/login']);
@@ -44,6 +44,5 @@ export class TasksService {
     const headers = new HttpHeaders({Authorization: `Bearer {token}`});
     return this.httpClient.post<any>('http://localhost:3001/tasks', task, {headers});
   }
-
 
 }

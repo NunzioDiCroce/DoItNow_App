@@ -16,6 +16,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './auth/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { TaskCreateComponent } from './components/task-create/task-create.component';
+import { TaskDetailsComponent } from './components/task-details/task-details.component';
 
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
@@ -38,7 +40,9 @@ const routes: Route[] = [
     HomeComponent,
     UsersComponent,
     TasksComponent,
-    ProfileComponent
+    ProfileComponent,
+    TaskCreateComponent,
+    TaskDetailsComponent
   ],
   imports: [
     BrowserModule,

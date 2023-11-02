@@ -44,7 +44,7 @@ public class TaskController {
 	// * * * * * * * * * * find task by id * * * * * * * * *
 	@GetMapping("/{id}")
 //	@PreAuthorize("isAuthenticated()")
-	public Task findtaskById(@PathVariable UUID id) {
+	public Task findTaskById(@PathVariable UUID id) {
 		return taskService.findTaskById(id);
 	}
 
@@ -59,9 +59,8 @@ public class TaskController {
 	// * * * * * * * * * * update task * * * * * * * * * *
 	@PutMapping("/{id}")
 //	@PreAuthorize("isAuthenticated()")
-	public Task updateTask(@PathVariable UUID id, @RequestBody TaskRequestPayload payload,
-			@RequestParam String userEmail) {
-		return taskService.updateTask(id, payload, userEmail);
+	public Task updateTask(@PathVariable UUID id, @RequestBody TaskRequestPayload payload, @RequestParam UUID userId) {
+		return taskService.updateTask(id, payload, userId);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *

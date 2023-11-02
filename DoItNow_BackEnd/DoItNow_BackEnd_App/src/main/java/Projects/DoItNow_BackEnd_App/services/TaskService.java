@@ -67,12 +67,12 @@ public class TaskService {
 	}
 
 	// * * * * * * * * * * update task * * * * * * * * * *
-	public Task updateTask(UUID id, TaskRequestPayload payload, String userEmail) throws NotFoundException {
+	public Task updateTask(UUID id, TaskRequestPayload payload, UUID userId) throws NotFoundException {
 
 		Task updatedTask = new Task();
 
 		// get user by email to assign task
-		User taskUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new NotFoundException(userEmail));
+		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
 
 		// get user tasks to define taskId
 		List<Task> userTasks = taskRepository.findAllByUser(taskUser);

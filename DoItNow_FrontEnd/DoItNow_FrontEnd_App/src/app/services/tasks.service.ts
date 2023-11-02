@@ -72,6 +72,15 @@ export class TasksService {
     return this.httpClient.put<any>(`http://localhost:3001/tasks/${taskId}`, task, {headers});
   }
 
+  // completeTask
+  completeTask(taskId: string, completedTask: boolean): Observable<any> {
+    const headers = this.createHeaders();
+    if(headers.keys.length === 0) {
+      return of(null);
+    }
+    return this.httpClient.put<any>(`http://localhost:3001/tasks/${taskId}`, completedTask, {headers});
+  }
+
   // deleteTask
   deleteTask(taskId: string): Observable<any> {
     const headers = this.createHeaders();

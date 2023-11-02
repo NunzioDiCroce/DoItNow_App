@@ -28,20 +28,6 @@ export class TasksService {
     return new HttpHeaders({Authorization: `Bearer ${token}`});
   }
 
-  // getTasks
-  getTasks(page: number, size: number, sortBy: string): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
-      return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
-    }
-    const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sortBy);
-    return this.httpClient.get<any>('http://localhost:3001/tasks', {headers, params}).pipe(map(response => {
-      return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)
-      }
-    }));
-  }
-
   // createTask
   createTask(task: TaskCreate): Observable<any> {
     const headers = this.createHeaders();
@@ -61,6 +47,22 @@ export class TasksService {
     }
     return this.httpClient.get<any>(`http://localhost:3001/tasks/${taskId}`, {headers});
   }
+
+  // getTasks
+  getTasks(page: number, size: number, sortBy: string): Observable<any> {
+    const headers = this.createHeaders();
+    if(headers.keys.length === 0) {
+      return of(null);
+    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
+    }
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sortBy);
+    return this.httpClient.get<any>('http://localhost:3001/tasks', {headers, params}).pipe(map(response => {
+      return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)
+      }
+    }));
+  }
+
+
 
   // updateTask
   updateTask(taskId: string, task: TaskUpdate): Observable<any> {

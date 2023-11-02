@@ -62,8 +62,6 @@ export class TasksService {
     }));
   }
 
-
-
   // updateTask
   updateTask(taskId: string, task: TaskUpdate): Observable<any> {
     const headers = this.createHeaders();

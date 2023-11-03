@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class JWTAuthFilter extends OncePerRequestFilter {
 
 	@Autowired
@@ -32,25 +31,26 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
 		String authHeader = request.getHeader("Authorization");
 
 		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			throw new UnauthorizedException("Please pass the token in the authorization header.");
-
 		String token = authHeader.substring(7);
-		System.out.println("Token ---> " + token);
+		System.out.println("TOKEN -------> " + token);
 
 		jwtTools.verifyToken(token);
 
 		String id = jwtTools.extractSubject(token);
-		User currentUser = userService.findUserById(UUID.fromString(id));
+		User currentUser = userService.findById(UUID.fromString(id));
 
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(currentUser, null,
 				currentUser.getAuthorities());
+
 		SecurityContextHolder.getContext().setAuthentication(authToken);
+
 		filterChain.doFilter(request, response);
+
 	}
 
 	// * * * * * * * * * * shouldNotFilter * * * * * * * * * *

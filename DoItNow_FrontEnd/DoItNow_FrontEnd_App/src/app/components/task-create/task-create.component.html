@@ -1,1 +1,49 @@
-<p>task-create works!</p>
+<div class="container">
+  <h4 class="mb-3">Create task</h4>
+  <div class="row">
+    <div class="col-6">
+
+      <form #form="ngForm" (ngSubmit)="createTask(form)">
+        <div class="form-group mb-3">
+          <label for="title">Title</label>
+          <input class="form-control" type="text" id="title" name="title" required ngModel>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="description">Description</label>
+          <input class="form-control" type="text" id="description" name="description" required ngModel>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="category">Category</label>
+          <select class="form-control" id="category" name="category" required ngModel>
+            <option value="EDUCATION">Education</option>
+            <option value="ENTERTAINMENT">Entertainment</option>
+            <option value="FITNESS">Fitness</option>
+            <option value="HEALTH">Health</option>
+            <option value="HOME">Home</option>
+            <option value="OTHER">Other</option>
+            <option value="PERSONAL">Personal</option>
+            <option value="SHOPPING">Shopping</option>
+            <option value="TRAVEL">Travel</option>
+            <option value="WORK">Work</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="expirationDate">Expiration Date</label>
+          <input class="form-control" type="date" id="expirationDate" name="expirationDate" required ngModel>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="notes">Notes</label>
+          <input class="form-control" type="text" id="notes" name="notes" ngModel>
+        </div>
+
+        <button class="btn btn-success" type="submit" [disabled]="form.invalid">Create task</button>
+        <button class="btn btn-danger" type="button" (click)="cancelCreation()">Cancel</button>
+      </form>
+
+    </div>
+  </div>
+</div>

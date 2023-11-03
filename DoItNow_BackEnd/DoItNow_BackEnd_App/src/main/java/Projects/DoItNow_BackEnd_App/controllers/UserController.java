@@ -36,8 +36,8 @@ public class UserController {
 
 	// * * * * * * * * * * find user by id * * * * * * * * * *
 	@GetMapping("/{userId}")
-	public User findUserById(@PathVariable UUID userId) {
-		return userService.findUserById(userId);
+	public User findById(@PathVariable UUID userId) {
+		return userService.findById(userId);
 	}
 
 	// * * * * * * * * * * find all users (with pagination) * * * * * * * * * *
@@ -45,20 +45,20 @@ public class UserController {
 //	@PreAuthorize("hasAuthority('ADMIN')")
 	public Page<User> findAllUsers(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sort) {
-		return userService.findAllUsers(page, size, sort);
+		return userService.find(page, size, sort);
 	}
 
 	// * * * * * * * * * * update user * * * * * * * * * *
 	@PutMapping("/{userId}")
-	public User updateUser(@PathVariable UUID userId, @RequestBody UserRequestPayload payload) {
-		return userService.updateUser(userId, payload);
+	public User updateUser(@PathVariable UUID userId, @RequestBody UserRequestPayload body) {
+		return userService.findByIdAndUpdate(userId, body);
 	}
 
 	// * * * * * * * * * * delete user * * * * * * * * * *
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable UUID userId) {
-		userService.deleteUser(userId);
+		userService.findByIdAndDelete(userId);
 	}
 
 	// * * * * find users by name, surname, email, role (with pagination) * * * * *

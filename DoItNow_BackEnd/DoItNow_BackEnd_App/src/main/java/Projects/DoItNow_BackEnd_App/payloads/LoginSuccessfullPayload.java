@@ -2,9 +2,11 @@ package Projects.DoItNow_BackEnd_App.payloads;
 
 import Projects.DoItNow_BackEnd_App.entities.User;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class LoginSuccessfullPayload {
 

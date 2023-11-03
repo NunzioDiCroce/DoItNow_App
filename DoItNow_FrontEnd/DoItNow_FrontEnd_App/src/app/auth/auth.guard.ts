@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
       if(user) {
         return true
       }
-      alert('Login to access this resource.\nRegister if you have not an account.')
+      alert('Login to access this resource!\nRegister if you have not an account.');
       return this.router.createUrlTree(['/login'])
     }));
   }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,42 +28,45 @@ public class UserService {
 	}
 
 	// * * * * * * * * * * create user * * * * * * * * * *
-	public User createUser(UserRequestPayload payload) {
-		userRepository.findByEmail(payload.getEmail()).ifPresent(user -> {
+	public User create(UserRequestPayload body) {
+		userRepository.findByEmail(body.getEmail()).ifPresent(user -> {
 			throw new BadRequestException("The email has already been used.");
 		});
-		User newUser = new User(payload.getName(), payload.getSurname(), payload.getEmail(), payload.getPassword());
+		User newUser = new User(body.getName(), body.getSurname(), body.getEmail(), body.getPassword());
 		return userRepository.save(newUser);
 	}
 
 	// * * * * * * * * * * find user by id * * * * * * * * * *
-	public User findUserById(UUID id) throws NotFoundException {
+	public User findById(UUID id) throws NotFoundException {
 		return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
 	}
 
 	// * * * * * * * * * * find all users (with pagination) * * * * * * * * * *
-	public Page<User> findAllUsers(int page, int size, String sort) {
-		return userRepository.findAll(PageRequest.of(page, size, Sort.by(sort)));
+	public Page<User> find(int page, int size, String sort) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+		return userRepository.findAll(pageable);
 	}
 
 	// * * * * * * * * * * update user * * * * * * * * * *
-	public User updateUser(UUID id, UserRequestPayload body) throws NotFoundException {
-		User updatedUser = this.findUserById(id);
-		updatedUser.setName(body.getName());
-		updatedUser.setSurname(body.getSurname());
-		updatedUser.setEmail(body.getEmail());
-		return userRepository.save(updatedUser);
+	public User findByIdAndUpdate(UUID id, UserRequestPayload body) throws NotFoundException {
+		User found = this.findById(id);
+		found.setEmail(body.getEmail());
+		found.setName(body.getName());
+		found.setSurname(body.getSurname());
+		return userRepository.save(found);
 	}
 
 	// * * * * * * * * * * delete user * * * * * * * * * *
-	public void deleteUser(UUID id) throws NotFoundException {
-		userRepository.delete(this.findUserById(id));
+	public void findByIdAndDelete(UUID id) throws NotFoundException {
+		User found = this.findById(id);
+		userRepository.delete(found);
 	}
 
 	// * * * * * * * * * * find user by email * * * * * * * * * *
 	// method used in AuthController
-	public User findUserByEmail(String email) throws NotFoundException {
-		return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email)
+				.orElseThrow(() -> new NotFoundException("User with email " + email + " not found."));
 	}
 
 	// * * * * * * * * * * find users by name (with pagination) * * * * * * * * * *

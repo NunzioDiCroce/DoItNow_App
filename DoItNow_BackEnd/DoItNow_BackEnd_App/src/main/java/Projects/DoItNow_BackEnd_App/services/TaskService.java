@@ -36,7 +36,7 @@ public class TaskService {
 
 		Task newTask = new Task();
 
-		// get user by email to assign task
+		// get user by userId to assign task
 		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
 
 		// get user tasks to define taskId
@@ -71,7 +71,7 @@ public class TaskService {
 
 		Task updatedTask = new Task();
 
-		// get user by email to assign task
+		// get user by userId to assign task
 		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
 
 		// get user tasks to define taskId

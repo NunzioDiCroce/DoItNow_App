@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Task } from 'src/app/models/task.interface';
 import { AuthService } from 'src/app/auth/auth.service';
 import { TasksService } from 'src/app/services/tasks.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tasks',
@@ -29,7 +30,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   pageIndex: number = 0;
   pageFirstRow: number = 1;
 
-  constructor(private authSrv: AuthService, private tasksSrv: TasksService) { }
+  constructor(private authSrv: AuthService, private tasksSrv: TasksService, private router: Router) { }
 
   ngOnInit(): void {
     this.authSub = this.authSrv.user$.subscribe((_user) => {
@@ -72,6 +73,31 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
       this.pageFirstRow = this.page * this.size + 1;
       this.loadTasks();
     }
+  }
+
+  // createTask
+  createTask(): void {
+    this.router.navigate(['/createTask']);
+  }
+
+  // goToTaskDetails
+  goToTaskDetails() {
+
+  }
+
+  // updateTask
+  updateTask() {
+
+  }
+
+  // completeTask
+  completeTask() {
+
+  }
+
+  // deleteTask
+  deleteTask() {
+
   }
 
   ngOnDestroy(): void {

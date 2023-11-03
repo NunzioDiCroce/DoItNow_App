@@ -1,8 +1,8 @@
 package Projects.DoItNow_BackEnd_App.payloads;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UserLoginPayload {
 
 	private String email;

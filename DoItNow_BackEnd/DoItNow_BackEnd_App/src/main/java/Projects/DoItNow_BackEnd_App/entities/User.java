@@ -8,10 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import Projects.DoItNow_BackEnd_App.enums.Role;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({ "password", "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired" })
+@JsonIgnoreProperties({ "password", "accountNonExpired", "authorities", "credentialsNonExpired", "accountNonLocked" })
 public class User implements UserDetails {
 
 	@Id
@@ -50,7 +50,8 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore // To avoid reference loops during serialization
 	private List<Task> tasks;
 
 	public User(String name, String surname, String email, String password) {
@@ -58,7 +59,7 @@ public class User implements UserDetails {
 		this.surname = surname;
 		this.email = email;
 		this.password = password;
-		this.role = Role.USER;
+		this.role = Role.USER; // To set 'USER' role by default
 	}
 
 	@Override

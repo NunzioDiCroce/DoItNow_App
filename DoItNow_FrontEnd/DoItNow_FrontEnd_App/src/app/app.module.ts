@@ -22,14 +22,18 @@ import { TaskDetailsComponent } from './components/task-details/task-details.com
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
   { path: '', component: HomeComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
   { path: 'tasks/:id', component: TaskDetailsComponent, canActivate: [AuthGuard] },
   { path: 'createTask', component: TaskCreateComponent, canActivate: [AuthGuard] },
+
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: ''}
+
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+
+  { path: '**', redirectTo: '' }
 ]
 
 @NgModule({

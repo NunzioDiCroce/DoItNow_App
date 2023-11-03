@@ -69,7 +69,7 @@ public class TaskService {
 	// * * * * * * * * * * update task * * * * * * * * * *
 	public Task updateTask(UUID id, TaskRequestPayload payload, UUID userId) throws NotFoundException {
 
-		Task updatedTask = new Task();
+		Task existingTask = findTaskById(id);
 
 		// get user by userId to assign task
 		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
@@ -80,16 +80,16 @@ public class TaskService {
 		int newTaskId = maxTaskId + 1;
 		String formattedTaskId = String.format("%04d", newTaskId);
 
-		updatedTask.setTaskId(formattedTaskId);
-		updatedTask.setTitle(payload.getTitle());
-		updatedTask.setDescription(payload.getDescription());
-		updatedTask.setCategory(payload.getCategory());
-		updatedTask.setExpirationDate(payload.getExpirationDate());
-		updatedTask.setCompleted(payload.getCompleted());
-		updatedTask.setNotes(payload.getNotes());
-		updatedTask.setUser(taskUser);
+		existingTask.setTaskId(formattedTaskId);
+		existingTask.setTitle(payload.getTitle());
+		existingTask.setDescription(payload.getDescription());
+		existingTask.setCategory(payload.getCategory());
+		existingTask.setExpirationDate(payload.getExpirationDate());
+		existingTask.setCompleted(payload.getCompleted());
+		existingTask.setNotes(payload.getNotes());
+		existingTask.setUser(taskUser);
 
-		return taskRepository.save(updatedTask);
+		return taskRepository.save(existingTask);
 	}
 
 	// * * * * * * * * * * delete task * * * * * * * * * *

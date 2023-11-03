@@ -33,17 +33,17 @@ public class AuthController {
 	// * * * * * * * * * * user register * * * * * * * * * *
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User userSignIn(@RequestBody @Validated UserRequestPayload payload) {
-		payload.setPassword(bcrypt.encode(payload.getPassword()));
-		User userCreated = userService.createUser(payload);
-		return userCreated;
+	public User saveUser(@RequestBody @Validated UserRequestPayload body) {
+		body.setPassword(bcrypt.encode(body.getPassword()));
+		User created = userService.create(body);
+		return created;
 	}
 
 	// * * * * * * * * * * user login * * * * * * * * * *
 	@PostMapping("/login")
-	public LoginSuccessfullPayload userLogin(@RequestBody UserLoginPayload payload) {
-		User user = userService.findUserByEmail(payload.getEmail());
-		if (bcrypt.matches(payload.getPassword(), user.getPassword())) {
+	public LoginSuccessfullPayload login(@RequestBody UserLoginPayload body) {
+		User user = userService.findByEmail(body.getEmail());
+		if (bcrypt.matches(body.getPassword(), user.getPassword())) {
 			String token = jwtTools.createToken(user);
 			return new LoginSuccessfullPayload(token, user);
 		} else {

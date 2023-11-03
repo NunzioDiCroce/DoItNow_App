@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { TaskCreate } from '../models/task-create.interface';
 import { TaskUpdate } from '../models/task-update.interface';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -29,13 +28,14 @@ export class TasksService {
   }
 
   // createTask
-  createTask(task: TaskCreate): Observable<any> {
+  createTask(task: TaskCreate, userId: string): Observable<any> {
     const headers = this.createHeaders();
     if(headers.keys.length === 0) {
       return of(null);
     // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
     }
-    return this.httpClient.post<any>('http://localhost:3001/tasks', task, {headers});
+    const params = new HttpParams().set('userId', userId);
+    return this.httpClient.post<any>('http://localhost:3001/tasks', task, {headers, params});
   }
 
   // getTaskDetails

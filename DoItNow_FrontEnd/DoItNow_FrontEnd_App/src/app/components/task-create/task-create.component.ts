@@ -40,10 +40,16 @@ export class TaskCreateComponent implements OnInit, OnDestroy { // add OnDestroy
 
   // createTask
   createTask(form: NgForm): void {
-    this.createTaskSub = this.tasksSrv.createTask(this.task).subscribe(() => {
-      window.alert('Task creation success!')
-      this.router.navigate(['/tasks']);
-    });
+    const userString = localStorage.getItem('user');
+    if(userString) {
+      const user = JSON.parse(userString);
+      this.createTaskSub = this.tasksSrv.createTask(this.task, user.id).subscribe(() => {
+        window.alert('Task creation success!')
+        this.router.navigate(['/tasks']);
+      });
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   // cancelCreation

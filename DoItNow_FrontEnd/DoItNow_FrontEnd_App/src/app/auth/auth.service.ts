@@ -18,20 +18,21 @@ export class AuthService {
   baseUrl = environment.baseUrl;
   private authSubj = new BehaviorSubject<null | AuthData>(null);
   utente!: AuthData;
+
   user$ = this.authSubj.asObservable();
   timeoutLogout: any;
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // login
-  login(data: {email: string, password: string}) {
-    return this.httpClient.post<AuthData>(`${this.baseUrl}auth/login`, data).pipe(tap((data) => {
+  login(data: { email:string; password:string }) {
+    return this.http.post<AuthData>(`${this.baseUrl}auth/login`, data).pipe(tap((data) => {
       console.log(data);
       this.authSubj.next(data);
       this.utente = data;
       console.log(this.utente);
       localStorage.setItem('user', JSON.stringify(data));
-      //this.autoLogout(data);
+      this.autoLogout(data)
     }))
   }
 
@@ -46,12 +47,12 @@ export class AuthService {
       return
     }
     this.authSubj.next(userData);
-    //this.autoLogout(userData);
+    this.autoLogout(userData)
   }
 
   // signup
-  register(data: {name: string, surname: string, email: string, password: string}) {
-    return this.httpClient.post(`${this.baseUrl}auth/register`, data);
+  register(data: { name: string; surname: string; email:string; password:string }) {
+    return this.http.post(`${this.baseUrl}auth/register`, data);
   }
 
   // logout
@@ -65,14 +66,14 @@ export class AuthService {
   }
 
   // autoLogout
-  /*autoLogout(data: AuthData) {
+  autoLogout(data:AuthData) {
     const expirationDate = this.jwtHelper.getTokenExpirationDate(data.accessToken) as Date;
     const expirationMilliseconds = expirationDate.getTime() - new Date().getTime();
-    this.timeoutLogout = setTimeout(() => {this.logout()}, expirationMilliseconds);
-  }*/
+    this.timeoutLogout = setTimeout(() => {this.logout()}, expirationMilliseconds)
+  }
 
   // errors handling
-  private errors(err: any) {
+  private errors(err:any) {
     switch(err.error) {
       case 'Email already exists':
         return throwError('Email already exists')
@@ -81,8 +82,9 @@ export class AuthService {
         return throwError('Email format is invalid')
         break
       default:
-        return throwError('Call error')
-        break
+         return throwError('Call error')
+         break
     }
   }
+
 }

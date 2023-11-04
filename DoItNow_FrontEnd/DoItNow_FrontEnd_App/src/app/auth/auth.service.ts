@@ -14,20 +14,21 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   // - - - - - - - - - - AuthService definition - - - - - - - - - -
+  isLoggedIn = false; // added
   jwtHelper = new JwtHelperService();
   baseUrl = environment.baseUrl;
-  private authSubj = new BehaviorSubject<null | AuthData>(null);
-  utente!: AuthData;
-
+  private authSubj = new BehaviorSubject<AuthData | null>(null);
+  utente: AuthData | null = null; // instead of 'utente!: AuthData;'
   user$ = this.authSubj.asObservable();
   timeoutLogout: any;
 
   constructor(private http: HttpClient, private router: Router) { }
 
   // login
-  login(data: { email:string; password:string }) {
+  login(data: {email: string; password: string}) {
     return this.http.post<AuthData>(`${this.baseUrl}auth/login`, data).pipe(tap((data) => {
       console.log(data);
+      this.isLoggedIn = true; // added
       this.authSubj.next(data);
       this.utente = data;
       console.log(this.utente);
@@ -43,21 +44,24 @@ export class AuthService {
       return
     }
     const userData: AuthData = JSON.parse(user);
-    if(this.jwtHelper.isTokenExpired(userData.accessToken)) {
-      return
+    if(!this.jwtHelper.isTokenExpired(userData.accessToken)) {
+      this.isLoggedIn = true; // added
+      this.authSubj.next(userData);
+      this.utente = userData;
+      this.autoLogout(userData)
     }
-    this.authSubj.next(userData);
-    this.autoLogout(userData)
   }
 
   // signup
-  register(data: { name: string; surname: string; email:string; password:string }) {
+  register(data: {name: string; surname: string; email:string; password:string}) {
     return this.http.post(`${this.baseUrl}auth/register`, data);
   }
 
   // logout
   logout() {
+    this.isLoggedIn = false; // added
     this.authSubj.next(null);
+    this.utente = null; // added
     localStorage.removeItem('user');
     this.router.navigate(['/']);
     if(this.timeoutLogout) {
@@ -73,7 +77,7 @@ export class AuthService {
   }
 
   // errors handling
-  private errors(err:any) {
+  /*private errors(err:any) {
     switch(err.error) {
       case 'Email already exists':
         return throwError('Email already exists')
@@ -85,6 +89,6 @@ export class AuthService {
          return throwError('Call error')
          break
     }
-  }
+  }*/
 
 }

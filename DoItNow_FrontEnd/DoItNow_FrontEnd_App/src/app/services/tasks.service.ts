@@ -84,10 +84,10 @@ export class TasksService {
       return of(null);
     } else {
       const user = JSON.parse(userString);
-      const params = new HttpParams().set('completed', completed.valueOf());
       const token = user.accessToken;
       const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
-      return this.http.put<any>(`http://localhost:3001/tasks/${taskId}`, null, {params, headers});
+      const dataToUpdate = {completed}; // create an object of data to update
+      return this.http.patch<any>(`http://localhost:3001/tasks/${taskId}`, dataToUpdate, {headers}); // patch
     }
   }
 

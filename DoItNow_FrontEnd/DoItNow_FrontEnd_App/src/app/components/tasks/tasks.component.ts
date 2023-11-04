@@ -21,6 +21,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   tasks: Task[] = [];
   loadTasksSub: Subscription | undefined;
   deleteTasksSub: Subscription | undefined;
+  completeTaskSub: Subscription | undefined;
 
   // tasks pagination
   page: number = 0;
@@ -92,8 +93,10 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   }
 
   // completeTask
-  completeTask(taskId: string) {
-
+  completeTask(completed: boolean, taskId: string) {
+    this.completeTaskSub = this.tasksSrv.completeTask(completed, taskId).subscribe(() => {
+      this.loadTasks();
+    });
   }
 
   // deleteTask
@@ -113,6 +116,9 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
     }
     if(this.loadTasksSub) {
       this.loadTasksSub.unsubscribe();
+    }
+    if(this.completeTaskSub) {
+      this.completeTaskSub.unsubscribe();
     }
     if(this.deleteTasksSub) {
       this.deleteTasksSub.unsubscribe();

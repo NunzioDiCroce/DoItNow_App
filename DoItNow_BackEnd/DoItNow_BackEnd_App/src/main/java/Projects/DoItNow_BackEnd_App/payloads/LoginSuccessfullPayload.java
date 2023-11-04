@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginSuccessfullPayload {
 
-	private String token;
+	private String accessToken;
 	private User user;
 
 }

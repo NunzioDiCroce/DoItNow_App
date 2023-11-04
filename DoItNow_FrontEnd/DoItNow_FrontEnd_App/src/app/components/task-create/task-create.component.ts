@@ -43,7 +43,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy { // add OnDestroy
     const userString = localStorage.getItem('user');
     if(userString) {
       const user = JSON.parse(userString);
-      this.createTaskSub = this.tasksSrv.createTask(this.task, user.id).subscribe(() => {
+      this.createTaskSub = this.tasksSrv.createTask(user.id, this.task).subscribe(() => {
         window.alert('Task creation success!')
         this.router.navigate(['/tasks']);
       });

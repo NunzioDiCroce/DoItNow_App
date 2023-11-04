@@ -13,82 +13,96 @@ import { TaskUpdate } from '../models/task-update.interface';
 export class TasksService {
 
   // - - - - - - - - - - TasksService definition - - - - - - - - - -
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
-  // private method to get token and create headers
-  private createHeaders(): HttpHeaders {
+  // getTasks
+  getTasks(page: number, size: number, sort: string): Observable<any> {
     const userString = localStorage.getItem('user');
     if(!userString) {
       this.router.navigate(['/login']);
-      return new HttpHeaders();
+      return of(null); // to return an empty observable
+    } else {
+      const user = JSON.parse(userString);
+      const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sort);
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.get<any>('http://localhost:3001/tasks', {params, headers}).pipe(map(response => {
+        return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)}
+      }));
     }
-    const user = JSON.parse(userString);
-    const token = user.accessToken;
-    return new HttpHeaders({Authorization: `Bearer ${token}`});
   }
 
   // createTask
-  createTask(task: TaskCreate, userId: string): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
-      return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
+  createTask(userId: string, task: TaskCreate): Observable<any> {
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
+      return of(null); // to return an empty observable
+    } else {
+      const user = JSON.parse(userString);
+      const params = new HttpParams().set('userId', userId.toString());
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.post<any>('http://localhost:3001/tasks', task, {params, headers});
     }
-    const params = new HttpParams().set('userId', userId);
-    return this.httpClient.post<any>('http://localhost:3001/tasks', task, {headers, params});
   }
 
   // getTaskDetails
   getTaskDetails(taskId: string): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
-      return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
+      return of(null); // to return an empty observable
+    } else {
+      const user = JSON.parse(userString);
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.get<any>(`http://localhost:3001/tasks/${taskId}`, {headers});
     }
-    return this.httpClient.get<any>(`http://localhost:3001/tasks/${taskId}`, {headers});
-  }
-
-  // getTasks
-  getTasks(page: number, size: number, sortBy: string): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
-      return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
-    }
-    const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sortBy);
-    return this.httpClient.get<any>('http://localhost:3001/tasks', {headers, params}).pipe(map(response => {
-      return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)
-      }
-    }));
   }
 
   // updateTask
-  updateTask(taskId: string, task: TaskUpdate): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
+  updateTask(userId: string, taskId: string, task: TaskUpdate): Observable<any> {
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
       return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
+    } else {
+      const user = JSON.parse(userString);
+      const params = new HttpParams().set('userId', userId.toString());
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.put<any>(`http://localhost:3001/tasks/${taskId}`, task, {params, headers});
     }
-    return this.httpClient.put<any>(`http://localhost:3001/tasks/${taskId}`, task, {headers});
   }
 
   // completeTask
-  completeTask(taskId: string, completedTask: boolean): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
+  completeTask(completed: boolean, taskId: string): Observable<any>{
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
       return of(null);
+    } else {
+      const user = JSON.parse(userString);
+      const params = new HttpParams().set('completed', completed.valueOf());
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.put<any>(`http://localhost:3001/tasks/${taskId}`, null, {params, headers});
     }
-    return this.httpClient.put<any>(`http://localhost:3001/tasks/${taskId}`, completedTask, {headers});
   }
 
   // deleteTask
   deleteTask(taskId: string): Observable<any> {
-    const headers = this.createHeaders();
-    if(headers.keys.length === 0) {
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
       return of(null);
-    // 'HttpHeaders.keys' is an Iterator object of headers. 'length === 0' means no headers so no authenticated user.
+    } else {
+      const user = JSON.parse(userString);
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.delete<any>(`http://localhost:3001/tasks/${taskId}`, {headers});
     }
-    return this.httpClient.delete<any>(`http://localhost:3001/tasks/${taskId}`, {headers});
   }
 
 }

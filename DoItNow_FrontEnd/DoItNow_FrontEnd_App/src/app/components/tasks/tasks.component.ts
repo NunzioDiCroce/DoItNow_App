@@ -19,7 +19,8 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   user!: AuthData | null;
   authSub!: Subscription | null;
   tasks: Task[] = [];
-  tasksSub: Subscription | undefined;
+  loadTasksSub: Subscription | undefined;
+  deleteTasksSub: Subscription | undefined;
 
   // tasks pagination
   page: number = 0;
@@ -41,7 +42,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
 
   // loadTasks with pagination
   loadTasks(): void {
-    this.tasksSub = this.tasksSrv.getTasks(this.page, this.size, this.sortBy).subscribe((pageData: any) => {
+    this.loadTasksSub = this.tasksSrv.getTasks(this.page, this.size, this.sortBy).subscribe((pageData: any) => {
       this.tasks = pageData.content;
       this.totalPages = pageData.totalPages;
       this.totalPagesArray = Array(this.totalPages).map((i) => i);
@@ -81,8 +82,8 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   }
 
   // goToTaskDetails
-  goToTaskDetails() {
-
+  goToTaskDetails(taskId: string): void {
+    this.router.navigate(['/tasks', taskId]);
   }
 
   // updateTask
@@ -96,16 +97,25 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   }
 
   // deleteTask
-  deleteTask() {
-
+  deleteTask(taskId: string): void {
+    const confirmation = window.confirm('Are you sure you want to delete the task?');
+    if(confirmation) {
+      this.deleteTasksSub = this.tasksSrv.deleteTask(taskId).subscribe(() => {
+        window.alert('Task deleted!');
+        this.loadTasks();
+      })
+    }
   }
 
   ngOnDestroy(): void {
     if(this.authSub) {
       this.authSub.unsubscribe();
     }
-    if(this.tasksSub) {
-      this.tasksSub.unsubscribe();
+    if(this.loadTasksSub) {
+      this.loadTasksSub.unsubscribe();
+    }
+    if(this.deleteTasksSub) {
+      this.deleteTasksSub.unsubscribe();
     }
   }
 

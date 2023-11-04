@@ -26,10 +26,10 @@
             <td>{{task.category}}</td>
             <td>{{task.expirationDate}}</td>
             <td>{{task.completed}}</td>
-            <td><button class="btn btn-success" (click)="goToTaskDetails()">Details</button></td>
+            <td><button class="btn btn-success" (click)="goToTaskDetails(task.id)">Details</button></td>
             <td><button class="btn btn-success" (click)="updateTask()">Update</button></td>
             <td><button class="btn btn-success" (click)="completeTask()">Complete</button></td>
-            <td><button class="btn btn-success" (click)="deleteTask()">Delete</button></td>
+            <td><button class="btn btn-success" (click)="deleteTask(task.id)">Delete</button></td>
           </tr>
         </tbody>
       </table>

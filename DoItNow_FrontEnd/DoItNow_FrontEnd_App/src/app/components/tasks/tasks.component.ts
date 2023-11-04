@@ -18,7 +18,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   // - - - - - - - - - - TasksComponent definition - - - - - - - - - -
   user!: AuthData | null;
   authSub!: Subscription | null;
-  tasks: Task[] | undefined;
+  tasks: Task[] = [];
   tasksSub: Subscription | undefined;
 
   // tasks pagination

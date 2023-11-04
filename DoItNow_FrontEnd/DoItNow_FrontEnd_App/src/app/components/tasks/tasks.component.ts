@@ -94,9 +94,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
 
   // completeTask
   completeTask(completed: boolean, taskId: string) {
-    this.completeTaskSub = this.tasksSrv.completeTask(completed, taskId).subscribe(() => {
-      this.loadTasks();
-    });
+    // TODO
   }
 
   // deleteTask

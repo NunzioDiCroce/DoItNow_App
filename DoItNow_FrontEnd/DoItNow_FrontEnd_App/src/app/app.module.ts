@@ -18,14 +18,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TaskCreateComponent } from './components/task-create/task-create.component';
 import { TaskDetailsComponent } from './components/task-details/task-details.component';
+import { TaskUpdateComponent } from './components/task-update/task-update.component';
 
 // - - - - - - - - - - routes configuration - - - - - - - - - -
 const routes: Route[] = [
   { path: '', component: HomeComponent },
 
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
-  { path: 'tasks/:id', component: TaskDetailsComponent, canActivate: [AuthGuard] },
   { path: 'createTask', component: TaskCreateComponent, canActivate: [AuthGuard] },
+  { path: 'tasks/:id', component: TaskDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'tasks/updateTask/:id', component: TaskUpdateComponent, canActivate: [AuthGuard] },
 
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
@@ -48,7 +50,8 @@ const routes: Route[] = [
     TasksComponent,
     ProfileComponent,
     TaskCreateComponent,
-    TaskDetailsComponent
+    TaskDetailsComponent,
+    TaskUpdateComponent
   ],
   imports: [
     BrowserModule,

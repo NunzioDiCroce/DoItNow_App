@@ -2,7 +2,7 @@ export interface AuthData {
   // - - - - - - - - - - AuthData definition - - - - - - - - - -
   accessToken: string;
   user: {
-    id: number,
+    id: string,
     name: string,
     surname: string,
     email: string,

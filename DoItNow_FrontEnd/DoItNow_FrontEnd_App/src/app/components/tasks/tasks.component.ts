@@ -87,11 +87,6 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
     this.router.navigate(['/tasks', taskId]);
   }
 
-  // updateTask
-  updateTask(taskId: string): void {
-    this.router.navigate(['/tasks/updateTask', taskId]);
-  }
-
   // completeTask
   completeTask(completed: boolean, taskId: string) {
     // TODO

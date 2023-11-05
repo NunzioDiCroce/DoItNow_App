@@ -6,17 +6,17 @@
       <form #form="ngForm" (ngSubmit)="createTask(form)">
         <div class="form-group mb-3">
           <label for="title">Title</label>
-          <input class="form-control" type="text" id="title" name="title" required ngModel>
+          <input class="form-control" type="text" id="title" name="title" required [(ngModel)]="task.title">
         </div>
 
         <div class="form-group mb-3">
           <label for="description">Description</label>
-          <input class="form-control" type="text" id="description" name="description" required ngModel>
+          <input class="form-control" type="text" id="description" name="description" required [(ngModel)]="task.description">
         </div>
 
         <div class="form-group mb-3">
           <label for="category">Category</label>
-          <select class="form-control" id="category" name="category" required ngModel>
+          <select class="form-control" id="category" name="category" required [(ngModel)]="task.category">
             <option value="EDUCATION">Education</option>
             <option value="ENTERTAINMENT">Entertainment</option>
             <option value="FITNESS">Fitness</option>
@@ -32,16 +32,18 @@
 
         <div class="form-group mb-3">
           <label for="expirationDate">Expiration Date</label>
-          <input class="form-control" type="date" id="expirationDate" name="expirationDate" required ngModel>
+          <input class="form-control" type="date" id="expirationDate" name="expirationDate" required [(ngModel)]="task.expirationDate">
         </div>
 
         <div class="form-group mb-3">
           <label for="notes">Notes</label>
-          <input class="form-control" type="text" id="notes" name="notes" ngModel>
+          <input class="form-control" type="text" id="notes" name="notes" [(ngModel)]="task.notes">
         </div>
 
-        <button class="btn btn-success" type="submit" [disabled]="form.invalid">Create task</button>
-        <button class="btn btn-danger" type="button" (click)="cancelCreation()">Cancel</button>
+        <div class="d-grid gap-2">
+          <button class="btn btn-success" type="submit" [disabled]="form.invalid">Create task</button>
+          <button class="btn btn-danger" type="button" (click)="cancelCreation()">Cancel</button>
+        </div>
       </form>
 
     </div>

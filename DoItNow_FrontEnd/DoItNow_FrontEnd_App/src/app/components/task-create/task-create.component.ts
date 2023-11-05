@@ -21,6 +21,8 @@ export class TaskCreateComponent implements OnInit, OnDestroy { // add OnDestroy
   authSub!: Subscription | null;
   createTaskSub: Subscription | undefined;
 
+  userId: string = '';
+
   // task initialization
   task: TaskCreate = {
     title: '',
@@ -36,20 +38,17 @@ export class TaskCreateComponent implements OnInit, OnDestroy { // add OnDestroy
     this.authSub = this.authSrv.user$.subscribe((_user) => {
       this.user = _user;
     });
+    if(this.user) {
+      this.userId = this.user.user.id;
+    }
   }
 
   // createTask
   createTask(form: NgForm): void {
-    const userString = localStorage.getItem('user');
-    if(userString) {
-      const user = JSON.parse(userString);
-      this.createTaskSub = this.tasksSrv.createTask(user.id, this.task).subscribe(() => {
-        window.alert('Task creation success!')
-        this.router.navigate(['/tasks']);
-      });
-    } else {
-      this.router.navigate(['/']);
-    }
+    this.createTaskSub = this.tasksSrv.createTask(this.userId, this.task).subscribe(() => {
+      window.alert('Task creation success!');
+      this.router.navigate(['/tasks']);
+    });
   }
 
   // cancelCreation

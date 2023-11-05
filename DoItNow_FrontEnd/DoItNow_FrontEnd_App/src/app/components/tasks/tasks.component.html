@@ -8,6 +8,7 @@
       <table class="table">
         <thead>
           <tr>
+            <th>#</th>
             <th>Id</th>
             <th>Title</th>
             <th>Category</th>
@@ -22,6 +23,7 @@
         <tbody>
           <tr *ngFor="let task of tasks; let i = index">
             <td>{{pageFirstRow + i}}</td>
+            <td>{{task.taskId}}</td>
             <td>{{task.title}}</td>
             <td>{{task.category}}</td>
             <td>{{task.expirationDate}}</td>
@@ -37,5 +39,21 @@
       </table>
 
     </div>
+
+    <!-- pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link paginationBtn" (click)="prevPage()">Previous</a></li>
+
+        <li class="page-item" *ngFor="let page of totalPagesArray">
+          <a class="page-link pageBtn" (click)="goToPage(page)"
+          [ngClass]="{ 'active': page === currentPageIndex }">{{ page + 1 }}</a></li>
+
+        <li class="page-item">
+          <a class="page-link paginationBtn" (click)="nextPage()">Next</a></li>
+      </ul>
+    </nav>
+
   </div>
 </div>

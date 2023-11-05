@@ -24,12 +24,12 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   completeTaskSub: Subscription | undefined;
 
   // tasks pagination
-  page: number = 0;
-  size: number = 10;
-  sortBy: string = 'taskId';
-  totalPages: number = 0;
+  currentPage = 0;
+  currentPageIndex = 0;
+  pageSize = 10;
+  sortBy = 'taskId';
+  totalPages = 0;
   totalPagesArray: number[] = [];
-  pageIndex: number = 0;
   pageFirstRow: number = 1;
 
   constructor(private authSrv: AuthService, private tasksSrv: TasksService, private router: Router) { }
@@ -43,36 +43,36 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
 
   // loadTasks with pagination
   loadTasks(): void {
-    this.loadTasksSub = this.tasksSrv.getTasks(this.page, this.size, this.sortBy).subscribe((pageData: any) => {
+    this.loadTasksSub = this.tasksSrv.getTasks(this.currentPage, this.pageSize, this.sortBy).subscribe((pageData: any) => {
       this.tasks = pageData.content;
       this.totalPages = pageData.totalPages;
-      this.totalPagesArray = Array(this.totalPages).map((i) => i);
+      this.totalPagesArray = Array(this.totalPages).fill(0).map((x, i) => i);
     });
   }
 
   prevPage(): void {
-    if(this.page > 0) {
-      this.page --;
-      this.pageIndex = this.page;
-      this.pageFirstRow = this.page * this.size + 1;
+    if(this.currentPage > 0) {
+      this.currentPage --;
+      this.currentPageIndex = this.currentPage;
+      this.pageFirstRow = this.currentPage * this.pageSize + 1;
+      this.loadTasks();
+    }
+  }
+
+  goToPage(page: number): void {
+    if(page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.currentPageIndex = page;
+      this.pageFirstRow = this.currentPage * this.pageSize + 1;
       this.loadTasks();
     }
   }
 
   nextPage(): void {
-    if(this.page < this.totalPages - 1) {
-      this.page ++;
-      this.pageIndex = this.page;
-      this.pageFirstRow = this.page * this.size + 1;
-      this.loadTasks();
-    }
-  }
-
-  goToPage(_page: number): void {
-    if(_page >= 0 && _page < this.totalPages) {
-      this.page = _page;
-      this.pageIndex = this.page;
-      this.pageFirstRow = this.page * this.size + 1;
+    if(this.currentPage < this.totalPages - 1) {
+      this.currentPage ++;
+      this.currentPageIndex = this.currentPage;
+      this.pageFirstRow = this.currentPage * this.pageSize + 1;
       this.loadTasks();
     }
   }

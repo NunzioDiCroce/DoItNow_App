@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { TasksService } from 'src/app/services/tasks.service';
 import { Task } from 'src/app/models/task.interface';
+import { ActivatedRoute, Router } from '@angular/router'; // ActivatedRoute to get task id from url
 
 @Component({
   selector: 'app-task-details',
@@ -20,11 +21,17 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   loadTaskDetailsSub: Subscription | undefined;
   taskDetails: Task | undefined;
 
-  constructor(private authSrv: AuthService, private tasksSrv: TasksService) { }
+  constructor(private authSrv: AuthService, private tasksSrv: TasksService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.authSub = this.authSrv.user$.subscribe((_user) => {
       this.user = _user;
+    });
+
+    // ActivatedRoute to get task id from url
+    this.route.params.subscribe((_params) => {
+      const taskId = _params['id'];
+      this.loadTaskDetails(taskId);
     });
   }
 
@@ -33,6 +40,16 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.loadTaskDetailsSub = this.tasksSrv.getTaskDetails(taskId).subscribe((_taskDetails: Task) => {
       this.taskDetails = _taskDetails;
     })
+  }
+
+  // updateTask
+  updateTask(taskId: string): void {
+    this.router.navigate(['/tasks/updateTask', taskId]);
+  }
+
+  // goToTasks
+  goToTasks(): void {
+    this.router.navigate(['/tasks']);
   }
 
   ngOnDestroy(): void {

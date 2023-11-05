@@ -10,25 +10,21 @@
           <tr>
             <th>#</th>
             <th>Title</th>
-            <th>Category</th>
-            <th>Expiration Date</th>
+            <th class="d-none d-md-table-cell">Category</th>
+            <th class="d-none d-md-table-cell">Expiration Date</th>
             <th>Completed</th>
-            <th>Update</th>
-            <th>Status</th>
+            <th>Details</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let task of tasks; let i = index" (click)="goToTaskDetails(task.id)">
+          <tr *ngFor="let task of tasks; let i = index">
             <td>{{pageFirstRow + i}}</td>
             <td>{{task.title}}</td>
-            <td>{{task.category}}</td>
-            <td>{{task.expirationDate}}</td>
+            <td class="d-none d-md-table-cell">{{task.category}}</td>
+            <td class="d-none d-md-table-cell">{{task.expirationDate}}</td>
             <td>{{task.completed}}</td>
-            <td><button class="btn btn-success" (click)="updateTask(task.id)">Update</button></td>
-            <td><button class="btn btn-success" (click)="completeTask(task.completed, task.id)">
-              {{task.completed ? 'Uncomplete' : 'Complete'}}
-            </button></td>
+            <td><button class="btn btn-success" (click)="goToTaskDetails(task.id)">Details</button></td>
             <td><button class="btn btn-success" (click)="deleteTask(task.id)">X</button></td>
           </tr>
         </tbody>

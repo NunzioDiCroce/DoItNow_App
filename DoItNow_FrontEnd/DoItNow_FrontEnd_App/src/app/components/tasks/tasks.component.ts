@@ -20,8 +20,10 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   authSub!: Subscription | null;
   tasks: Task[] = [];
   loadTasksSub: Subscription | undefined;
-  deleteTasksSub: Subscription | undefined;
   completeTaskSub: Subscription | undefined;
+  deleteTasksSub: Subscription | undefined;
+
+  userId: string = '';
 
   // tasks pagination
   currentPage = 0;
@@ -38,6 +40,9 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
     this.authSub = this.authSrv.user$.subscribe((_user) => {
       this.user = _user;
     });
+    if(this.user) {
+      this.userId = this.user.user.id;
+    }
     this.loadTasks(); // loadTasks with pagination
   }
 
@@ -87,9 +92,22 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
     this.router.navigate(['/tasks', taskId]);
   }
 
-  // completeTask
-  completeTask(completed: boolean, taskId: string) {
-    // TODO
+  // completeTask (checkboxChange + completeTasks)
+  checkboxChange(event: Event, taskId: string): void {
+    const checkbox = event.target as HTMLInputElement;
+    const newStatus = checkbox.checked;
+    const confirmation = window.confirm('Are you sure you want to complete the task?');
+    if(!confirmation) {
+      checkbox.checked = !newStatus;
+    } else {
+      this.completeTask(taskId, newStatus);
+    }
+  }
+
+  completeTask(taskId: string, newStatus: boolean): void {
+    this.completeTaskSub = this.tasksSrv.completeTask(this.userId, taskId, ).subscribe(() => {
+      this.loadTasks();
+    });
   }
 
   // deleteTask
@@ -99,7 +117,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
       this.deleteTasksSub = this.tasksSrv.deleteTask(taskId).subscribe(() => {
         window.alert('Task deleted!');
         this.loadTasks();
-      })
+      });
     }
   }
 

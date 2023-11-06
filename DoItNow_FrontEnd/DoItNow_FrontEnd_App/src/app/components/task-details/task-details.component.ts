@@ -39,7 +39,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   loadTaskDetails(taskId: string): void {
     this.loadTaskDetailsSub = this.tasksSrv.getTaskDetails(taskId).subscribe((_taskDetails: Task) => {
       this.taskDetails = _taskDetails;
-    })
+    });
   }
 
   // updateTask

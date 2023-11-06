@@ -21,14 +21,14 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
   user!: AuthData | null;
   authSub!: Subscription | null;
   loadTaskDetailsSub: Subscription | undefined;
-  taskDetails: TaskUpdate | undefined;
+  //taskDetails: TaskUpdate | undefined;
   updateTaskSub: Subscription | undefined;
 
   userId: string = '';
   taskId: string = '';
 
   // task initialization
-  task: TaskUpdate = {
+  taskDetails: TaskUpdate = {
     title: '',
     description: '',
     category: '',
@@ -62,7 +62,7 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
 
   // updateTask
   updateTask(form: NgForm): void {
-    this.updateTaskSub = this.tasksSrv.updateTask(this.userId, this.taskId, this.task).subscribe(() => {
+    this.updateTaskSub = this.tasksSrv.updateTask(this.userId, this.taskId, this.taskDetails).subscribe(() => {
       window.alert('Task update success!')
       this.router.navigate(['/tasks']);
     });

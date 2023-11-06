@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { TasksService } from 'src/app/services/tasks.service';
-import { Task } from 'src/app/models/task.interface';
 import { TaskUpdate } from 'src/app/models/task-update.interface';
 import { ActivatedRoute, Router } from '@angular/router'; // ActivatedRoute to get task id from url
 
@@ -21,7 +20,6 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
   user!: AuthData | null;
   authSub!: Subscription | null;
   loadTaskDetailsSub: Subscription | undefined;
-  //taskDetails: TaskUpdate | undefined;
   updateTaskSub: Subscription | undefined;
 
   userId: string = '';

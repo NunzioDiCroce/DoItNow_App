@@ -74,13 +74,7 @@ public class TaskService {
 		// get user by userId to assign task
 		User taskUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
 
-		// get user tasks to define taskId
-		List<Task> userTasks = taskRepository.findAllByUser(taskUser);
-		int maxTaskId = userTasks.stream().mapToInt(taskId -> Integer.parseInt(taskId.getTaskId())).max().orElse(0);
-		int newTaskId = maxTaskId + 1;
-		String formattedTaskId = String.format("%04d", newTaskId);
-
-		existingTask.setTaskId(formattedTaskId);
+		existingTask.setTaskId(existingTask.getTaskId());
 		existingTask.setTitle(payload.getTitle());
 		existingTask.setDescription(payload.getDescription());
 		existingTask.setCategory(payload.getCategory());

@@ -7,6 +7,7 @@ import { Task } from 'src/app/models/task.interface';
 import { AuthService } from 'src/app/auth/auth.service';
 import { TasksService } from 'src/app/services/tasks.service';
 import { Router } from '@angular/router';
+import { TaskUpdate } from 'src/app/models/task-update.interface';
 
 @Component({
   selector: 'app-tasks',
@@ -24,6 +25,16 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   deleteTasksSub: Subscription | undefined;
 
   userId: string = '';
+
+  // task initialization
+  taskToUpdate: TaskUpdate = {
+    title: '',
+    description: '',
+    category: '',
+    expirationDate: new Date(),
+    completed: false,
+    notes: ''
+  }
 
   // tasks pagination
   currentPage = 0;
@@ -105,8 +116,12 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   }
 
   completeTask(taskId: string, newStatus: boolean): void {
-    this.completeTaskSub = this.tasksSrv.completeTask(this.userId, taskId, ).subscribe(() => {
-      this.loadTasks();
+    this.tasksSrv.getTaskDetails(taskId).subscribe((_taskDetails) => {
+      this.taskToUpdate = _taskDetails
+      this.taskToUpdate.completed = newStatus;
+      this.completeTaskSub = this.tasksSrv.completeTask(this.userId, taskId, this.taskToUpdate).subscribe(() => {
+        this.loadTasks();
+      });
     });
   }
 

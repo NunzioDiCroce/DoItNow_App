@@ -77,7 +77,7 @@ export class TasksService {
   }
 
   // completeTask
-  completeTask(userId: string, taskId: string): Observable<any>{
+  completeTask(userId: string, taskId: string, taskToComplete: TaskUpdate): Observable<any>{
     const userString = localStorage.getItem('user');
     if(!userString) {
       this.router.navigate(['/login']);
@@ -87,7 +87,7 @@ export class TasksService {
       const params = new HttpParams().set('userId', userId.toString());
       const token = user.accessToken;
       const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
-      return this.http.put<any>(`http://localhost:3001/tasks/${taskId}`, {params, headers});
+      return this.http.put<any>(`http://localhost:3001/tasks/${taskId}`, taskToComplete, {params, headers});
     }
   }
 

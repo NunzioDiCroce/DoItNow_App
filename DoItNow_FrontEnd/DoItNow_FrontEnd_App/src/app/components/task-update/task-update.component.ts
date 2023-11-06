@@ -6,8 +6,9 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { TasksService } from 'src/app/services/tasks.service';
+import { Task } from 'src/app/models/task.interface';
 import { TaskUpdate } from 'src/app/models/task-update.interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; // ActivatedRoute to get task id from url
 
 @Component({
   selector: 'app-task-update',
@@ -19,7 +20,8 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
   // - - - - - - - - - - TaskUpdateComponent definition - - - - - - - - - -
   user!: AuthData | null;
   authSub!: Subscription | null;
-  getTaskDetailsSub: Subscription | undefined;
+  loadTaskDetailsSub: Subscription | undefined;
+  taskDetails: TaskUpdate | undefined;
   updateTaskSub: Subscription | undefined;
 
   userId: string = '';
@@ -35,18 +37,26 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
     notes: ''
   }
 
-  constructor(private authSrv: AuthService, private tasksSrv: TasksService, private router: Router) { }
+  constructor(private authSrv: AuthService, private tasksSrv: TasksService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.authSub = this.authSrv.user$.subscribe((_user) => {
       this.user = _user
     });
     if(this.user) { // get user.id
-      this.userId = this.user?.user.id;
+      this.userId = this.user.user.id;
     }
-    // recover existing task data
-    this.getTaskDetailsSub = this.tasksSrv.getTaskDetails(this.taskId).subscribe((_taskDetails) => {
-      this.task = _taskDetails
+    // ActivatedRoute to get task id from url
+    this.route.params.subscribe((_params) => {
+      this.taskId = _params['id'];
+      this.loadTaskDetails(this.taskId);
+    });
+  }
+
+  // loadTaskDetails
+  loadTaskDetails(taskId: string): void {
+    this.loadTaskDetailsSub = this.tasksSrv.getTaskDetails(taskId).subscribe((_taskDetails) => {
+      this.taskDetails = _taskDetails;
     });
   }
 
@@ -70,8 +80,11 @@ export class TaskUpdateComponent implements OnInit, OnDestroy {
     if(this.authSub) {
       this.authSub.unsubscribe();
     }
-    if(this.getTaskDetailsSub) {
-      this.getTaskDetailsSub.unsubscribe();
+    if(this.loadTaskDetailsSub) {
+      this.loadTaskDetailsSub.unsubscribe();
+    }
+    if(this.updateTaskSub) {
+      this.updateTaskSub.unsubscribe();
     }
   }
 

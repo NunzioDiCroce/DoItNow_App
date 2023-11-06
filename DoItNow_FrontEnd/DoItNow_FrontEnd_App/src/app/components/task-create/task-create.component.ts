@@ -38,7 +38,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy { // add OnDestroy
     this.authSub = this.authSrv.user$.subscribe((_user) => {
       this.user = _user;
     });
-    if(this.user) {
+    if(this.user) { // get user.id
       this.userId = this.user.user.id;
     }
   }

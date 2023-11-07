@@ -29,7 +29,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-white" [routerLink]="['/users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="user">Users</a>
+          <a class="nav-link active text-white" [routerLink]="['/users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" *ngIf="user && user.user.role === 'ADMIN'">Users</a>
         </li>
 
         <li class="nav-item">

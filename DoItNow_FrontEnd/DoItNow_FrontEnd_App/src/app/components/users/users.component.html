@@ -8,22 +8,22 @@
       <table class="table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th class="d-none d-md-table-cell">Surname</th>
-            <th class="d-none d-md-table-cell">Email</th>
-            <th>Role</th>
-            <th>Details</th>
+            <th class="text-center">#</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Surname</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Role</th>
+            <th class="text-center">Details</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of users; let i = index">
-            <td>{{pageFirstRow + i}}</td>
-            <td>{{user.name}}</td>
-            <td class="d-none d-md-table-cell">{{user.surname}}</td>
-            <td class="d-none d-md-table-cell">{{user.email}}</td>
-            <td class="d-none d-md-table-cell">{{user.role}}</td>
-            <td><button class="btn btn-success" (click)="goToUserDetails(user.id)">Details</button></td>
+            <td class="text-center">{{pageFirstRow + i}}</td>
+            <td class="text-center">{{user.name}}</td>
+            <td class="text-center">{{user.surname}}</td>
+            <td class="text-center">{{user.email}}</td>
+            <td class="text-center">{{user.role}}</td>
+            <td class="text-center"><button class="btn btn-outline-dark" (click)="goToUserDetails(user.id)">Details</button></td>
           </tr>
         </tbody>
       </table>

@@ -5,7 +5,7 @@
 
       <div class="d-grid"><button class="btn btn-success mb-3" (click)="createTask()">Create task</button></div>
 
-      <table class="table">
+      <table class="table" *ngIf="tasks.length !== 0 else noTasks">
         <thead>
           <tr>
             <th class="text-center">#</th>
@@ -48,6 +48,11 @@
           <a class="page-link paginationBtn" (click)="nextPage()">Next</a></li>
       </ul>
     </nav>
+
+    <ng-template #noTasks>
+      <p>There are no tasks.</p>
+      <p>Use the 'Create task' button to create the first task.</p>
+    </ng-template>
 
   </div>
 </div>

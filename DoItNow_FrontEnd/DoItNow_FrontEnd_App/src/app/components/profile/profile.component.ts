@@ -4,6 +4,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthData } from 'src/app/auth/auth-data.interface';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { UsersService } from 'src/app/services/users.service';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-profile',

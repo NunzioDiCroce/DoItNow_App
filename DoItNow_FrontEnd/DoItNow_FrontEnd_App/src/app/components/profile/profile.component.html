@@ -1,16 +1,30 @@
 <div class="container">
-  <h4 class="mb-3"><strong>{{user?.user?.name}} {{user?.user?.surname}}</strong> profile</h4>
+  <h4 class="mb-3">Profile</h4>
   <div class="row">
-    <div class="col-12">
+    <div class="col-6">
 
-      <div class="card">
-        <div class="card-body">
-          <div class="card-text"><strong>Name: </strong>{{user?.user?.name}}</div>
-          <div class="card-text"><strong>Surname: </strong>{{user?.user?.surname}}</div>
-          <div class="card-text"><strong>Email: </strong>{{user?.user?.email}}</div>
-          <div class="card-text"><strong>Role: </strong>{{user?.user?.role}}</div>
+      <form #form="ngForm">
+        <div class="form-group mb-3">
+          <label for="name">Name</label>
+          <input class="form-control" type="text" id="name" name="name" [(ngModel)]="user!.user.name" disabled>
         </div>
-      </div>
+
+        <div class="form-group mb-3">
+          <label for="surname">Surname</label>
+          <input class="form-control" type="text" id="surname" name="surname" [(ngModel)]="user!.user.surname" disabled>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="email">Email</label>
+          <input class="form-control" type="text" id="email" name="email" [(ngModel)]="user!.user.email" disabled>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="role">Role</label>
+          <input class="form-control" type="text" id="role" name="role" [(ngModel)]="user!.user.role" disabled>
+        </div>
+
+      </form>
 
     </div>
   </div>

@@ -1,1 +1,49 @@
-<p>users works!</p>
+<div class="container">
+  <h4 class="mb-3">Users</h4>
+  <div class="row">
+    <div class="col-12">
+
+
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th class="d-none d-md-table-cell">Surname</th>
+            <th class="d-none d-md-table-cell">Email</th>
+            <th>Role</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users; let i = index">
+            <td>{{pageFirstRow + i}}</td>
+            <td>{{user.name}}</td>
+            <td class="d-none d-md-table-cell">{{user.surname}}</td>
+            <td class="d-none d-md-table-cell">{{user.email}}</td>
+            <td class="d-none d-md-table-cell">{{user.role}}</td>
+            <td><button class="btn btn-success" (click)="goToUserDetails(user.id)">Details</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link paginationBtn" (click)="prevPage()">Previous</a></li>
+
+        <li class="page-item" *ngFor="let page of totalPagesArray">
+          <a class="page-link pageBtn" (click)="goToPage(page)"
+          [ngClass]="{ 'active': page === currentPageIndex }">{{ page + 1 }}</a></li>
+
+        <li class="page-item">
+          <a class="page-link paginationBtn" (click)="nextPage()">Next</a></li>
+      </ul>
+    </nav>
+
+  </div>
+</div>

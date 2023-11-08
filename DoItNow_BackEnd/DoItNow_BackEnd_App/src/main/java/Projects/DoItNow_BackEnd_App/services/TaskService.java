@@ -66,6 +66,12 @@ public class TaskService {
 		return taskRepository.findAll(PageRequest.of(page, size, Sort.by(sort)));
 	}
 
+	// * * * * * * * * * * find all user tasks (with pagination) * * * * * * * * * *
+	public Page<Task> findAllUserTasks(UUID userId, int page, int size, String sort) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
+		return taskRepository.findByUser(user, PageRequest.of(page, size, Sort.by(sort)));
+	}
+
 	// * * * * * * * * * * update task * * * * * * * * * *
 	public Task updateTask(UUID id, TaskRequestPayload payload, UUID userId) throws NotFoundException {
 

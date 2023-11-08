@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import Projects.DoItNow_BackEnd_App.entities.Task;
+import Projects.DoItNow_BackEnd_App.entities.User;
 import Projects.DoItNow_BackEnd_App.enums.Category;
 import Projects.DoItNow_BackEnd_App.payloads.TaskRequestPayload;
 import Projects.DoItNow_BackEnd_App.services.TaskService;
@@ -54,6 +56,15 @@ public class TaskController {
 	public Page<Task> findAllTasks(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "taskId") String sort) {
 		return taskService.findAllTasks(page, size, sort);
+	}
+
+	// * * * * * * * * * * find all user tasks (with pagination) * * * * * * * * * *
+	@GetMapping("/usertasks")
+//	@PreAuthorize("isAuthenticated()")
+	public Page<Task> findAllUserTasks(@AuthenticationPrincipal User user, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "0") int size, @RequestParam(defaultValue = "taskId") String sort) {
+		UUID userId = user.getId();
+		return taskService.findAllUserTasks(userId, page, size, sort);
 	}
 
 	// * * * * * * * * * * update task * * * * * * * * * *

@@ -1,6 +1,6 @@
 # :rocket: DoItNow_App
 
-DoItNow is a perfect web application designed for creating to-do lists. It helps you plan easly using to-to lists. The application is developed using Angular for the frontend, Spring Boot for the backend, and PostgreSQL for data storage.
+DoItNow is a web application designed for creating to-do lists. It helps you plan easly using to-do lists. The application is developed using Angular for the frontend, Spring Boot for the backend, and PostgreSQL for data storage.
 
 ## :fire: Features
 

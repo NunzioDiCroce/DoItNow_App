@@ -40,7 +40,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
   currentPage = 0;
   currentPageIndex = 0;
   pageSize = 10;
-  sortBy = 'taskId';
+  sort = 'taskId';
   totalPages = 0;
   totalPagesArray: number[] = [];
   pageFirstRow: number = 1;
@@ -59,7 +59,7 @@ export class TasksComponent implements OnInit, OnDestroy { // add OnDestroy
 
   // loadTasks with pagination
   loadTasks(): void {
-    this.loadTasksSub = this.tasksSrv.getTasks(this.currentPage, this.pageSize, this.sortBy).subscribe((pageData: any) => {
+    this.loadTasksSub = this.tasksSrv.getUserTasks(this.currentPage, this.pageSize, this.sort).subscribe((pageData: any) => {
       this.tasks = pageData.content;
       this.totalPages = pageData.totalPages;
       this.totalPagesArray = Array(this.totalPages).fill(0).map((x, i) => i);

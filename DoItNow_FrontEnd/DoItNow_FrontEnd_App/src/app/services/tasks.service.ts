@@ -23,10 +23,27 @@ export class TasksService {
       return of(null); // to return an empty observable
     } else {
       const user = JSON.parse(userString);
-      const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sortBy', sort);
+      const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sort', sort);
       const token = user.accessToken;
       const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
       return this.http.get<any>('http://localhost:3001/tasks', {params, headers}).pipe(map(response => {
+        return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)}
+      }));
+    }
+  }
+
+  // getUserTasks
+  getUserTasks(page: number, size: number, sort: string): Observable<any> {
+    const userString = localStorage.getItem('user');
+    if(!userString) {
+      this.router.navigate(['/login']);
+      return of(null); // to return an empty observable
+    } else {
+      const user = JSON.parse(userString);
+      const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sort', sort);
+      const token = user.accessToken;
+      const headers = new HttpHeaders({Authorization: `Bearer ${token}`});
+      return this.http.get<any>('http://localhost:3001/tasks/usertasks', {params, headers}).pipe(map(response => {
         return {content: response.content, totalElements: response.totalElements, totalPages: Math.ceil(response.totalElements/size)}
       }));
     }

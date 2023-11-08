@@ -35,7 +35,7 @@
     </div>
 
     <!-- pagination -->
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" *ngIf="tasks.length">
       <ul class="pagination justify-content-center">
         <li class="page-item">
           <a class="page-link paginationBtn" (click)="prevPage()">Previous</a></li>

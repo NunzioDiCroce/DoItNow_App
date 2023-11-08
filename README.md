@@ -8,7 +8,7 @@ DoItNow is a perfect web application designed for creating to-do lists. It helps
 - User profiling
 - Tasks list management for each user
 - Task creation, update, deletion, completion functionalities
-- Task detail management
+- Task details management
 
 ## :wrench: Getting Started: Prerequisites
 

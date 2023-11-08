@@ -6,7 +6,7 @@ DoItNow is a web application designed for creating to-do lists. It helps you pla
 
 - User registration and login with JWT token
 - User profiling
-- Tasks list management for each user
+- Task list management for each user
 - Task creation, update, deletion, completion functionalities
 - Task details management
 
